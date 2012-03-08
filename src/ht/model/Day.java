@@ -5,8 +5,11 @@ package ht.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Models a day to track attendance.
@@ -17,7 +20,11 @@ import javax.persistence.Id;
 @Entity
 public class Day {
 	@Id
+	@Temporal(TemporalType.DATE)
+	@Column(name = "DATE")
 	private Date _date;
+	
+	@Column(name = "HAD_SCHOOL")
 	private Boolean _hadSchool;
 
 	/**

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="records" transaction-type="RESOURCE_LOCAL">
+		<class>ht.model.Concept</class>
+		<class>ht.model.CurriculumLogEntry</class>
+		<class>ht.model.Day</class>
+		<class>ht.model.FieldTrip</class>
+		<class>ht.model.JournalEntry</class>
+		<class>ht.model.PlannerEntry</class>
+		<class>ht.model.ReadingListEntry</class>
+		<class>ht.model.ReportCardEntry</class>
+		<class>ht.model.Subject</class>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby:hstDB;create=true" />
+
+			<!-- EclipseLink should create the database schema automatically -->
+			<property name="eclipselink.ddl-generation" value="create-tables" />
+			<property name="eclipselink.ddl-generation.output-mode"
+				value="sql-script" />
+		</properties>
+	</persistence-unit>
+</persistence>

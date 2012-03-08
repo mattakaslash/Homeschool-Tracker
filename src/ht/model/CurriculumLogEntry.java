@@ -5,6 +5,7 @@ package ht.model;
 
 import java.net.URL;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,11 +22,20 @@ import javax.persistence.Lob;
 public class CurriculumLogEntry {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long _id;
+	
+	@Column(name = "TITLE")
 	private String _title;
+	
+	@Column(name = "AUTHOR")
 	private String _author;
+	
+	@Column(name = "URL")
 	private URL _url;
+	
 	@Lob
+	@Column(name = "NOTES")
 	private String _notes;
 
 	/**

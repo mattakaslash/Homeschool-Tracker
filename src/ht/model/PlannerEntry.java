@@ -5,10 +5,14 @@ package ht.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Models a planner entry for a given day.
@@ -19,10 +23,18 @@ import javax.persistence.Lob;
 public class PlannerEntry {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long _id;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "WHEN")
 	private Date _when;
+	
+	@JoinColumn(name = "TOPIC_ID")
 	private Concept _topic;
+	
 	@Lob
+	@Column(name = "NOTES")
 	private String _notes;
 	
 	/**

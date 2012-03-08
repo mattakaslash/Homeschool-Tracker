@@ -7,10 +7,14 @@ import ht.util.SchoolYear;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Models a report card entry.
@@ -22,10 +26,20 @@ import javax.persistence.Id;
 public class ReportCardEntry {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long _id;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "YEAR_STARTING")
 	private Date _yearStarting;
+	
+	@Column(name = "QUARTER")
 	private Integer _quarter;
+	
+	@JoinColumn(name = "SUBJECT_ID")
 	private Subject _topic;
+	
+	@Column(name = "RATING")
 	private String _rating;
 	
 	/**

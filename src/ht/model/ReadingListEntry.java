@@ -5,10 +5,13 @@ package ht.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Models a reading list entry.
@@ -20,12 +23,27 @@ import javax.persistence.Id;
 public class ReadingListEntry {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long _id;
+	
+	@Column(name = "TITLE")
 	private String _title;
+	
+	@Column(name = "AUTHOR")
 	private String _author;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "STARTED")
 	private Date _started;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "FINISHED")
 	private Date _finished;
+	
+	@Column(name = "PROGRESS")
 	private Integer _progress;
+	
+	@Column(name = "ASSISTED")
 	private Boolean _assisted;
 
 	/**

@@ -5,9 +5,13 @@ package ht.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Models a journal entry.
@@ -18,9 +22,18 @@ import javax.persistence.Id;
 public class JournalEntry {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long _id;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "INTRODUCED")
 	private Date _introduced;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "MASTERED")
 	private Date _mastered;
+	
+	@JoinColumn(name = "TOPIC_ID")
 	private Concept _topic;
 	
 	/**

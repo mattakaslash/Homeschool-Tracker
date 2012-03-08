@@ -5,11 +5,14 @@ package ht.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * Models a field trip.
@@ -21,12 +24,21 @@ import javax.persistence.Lob;
 public class FieldTrip {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long _id;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "WHEN")
 	private Date _when;
+	
+	@Column(name = "WHAT")
 	private String _what;
-	private String _where;
+	
+	@Column(name = "LOCATION")
+	private String _location;
 
 	@Lob
+	@Column(name = "NOTES")
 	private String _notes;
 
 	/**
@@ -35,7 +47,7 @@ public class FieldTrip {
 	public FieldTrip() {
 		setWhen(new Date());
 		setWhat("");
-		setWhere("");
+		setLocation("");
 		setNotes("");
 	}
 
@@ -87,16 +99,16 @@ public class FieldTrip {
 	/**
 	 * @return the where
 	 */
-	private String getWhere() {
-		return _where;
+	private String getLocation() {
+		return _location;
 	}
 
 	/**
 	 * @param where
 	 *            the where to set
 	 */
-	private void setWhere(String where) {
-		_where = where;
+	private void setLocation(String where) {
+		_location = where;
 	}
 
 	/**
