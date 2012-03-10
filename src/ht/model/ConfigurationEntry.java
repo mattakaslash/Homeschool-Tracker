@@ -18,16 +18,29 @@ public class ConfigurationEntry {
 	@Id
 	@Column(name = "NAME")
 	private String _name;
-	
+
 	@Column(name = "VALUE")
 	private String _value;
-	
+
 	/**
 	 * Creates a new blank configuration entry.
 	 */
 	public ConfigurationEntry() {
 		setName("");
 		setValue("");
+	}
+
+	/**
+	 * Creates a new configuration entry.
+	 * 
+	 * @param name
+	 *            the configuration parameter
+	 * @param value
+	 *            the value of the configuration parameter
+	 */
+	public ConfigurationEntry(String name, String value) {
+		setName(name);
+		setValue(value);
 	}
 
 	/**
@@ -38,7 +51,8 @@ public class ConfigurationEntry {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	private void setName(String name) {
 		_name = name;
@@ -52,13 +66,16 @@ public class ConfigurationEntry {
 	}
 
 	/**
-	 * @param value the value to set
+	 * @param value
+	 *            the value to set
 	 */
 	private void setValue(String value) {
 		_value = value;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {

@@ -90,6 +90,6 @@ public class MainFrame extends JFrame {
 	 * @param event
 	 */
 	private void jMenuItemFileExitActionActionPerformed(ActionEvent event) {
-		this.setVisible(false);
+		this.dispose();
 	}
 }
