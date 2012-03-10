@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -33,6 +34,10 @@ public class PlannerEntry {
 	@JoinColumn(name = "TOPIC_ID")
 	private Concept _topic;
 	
+	@JoinColumn(name = "STUDENT_ID")
+	@OneToOne
+	private Student _student;
+	
 	@Lob
 	@Column(name = "NOTES")
 	private String _notes;
@@ -43,6 +48,7 @@ public class PlannerEntry {
 	public PlannerEntry() {
 		setWhen(new Date());
 		setTopic(null);
+		setStudent(null);
 		setNotes("");
 	}
 	/**
@@ -92,5 +98,17 @@ public class PlannerEntry {
 	 */
 	private void setNotes(String notes) {
 		_notes = notes;
+	}
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return _student;
+	}
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		_student = student;
 	}
 }

@@ -3,9 +3,6 @@
  */
 package ht;
 
-import java.util.Map;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -23,11 +20,5 @@ public class HomeschoolTracker {
 	 */
 	public static void main(String[] args) {
 		factory = Persistence.createEntityManagerFactory("records");
-		EntityManager em = factory.createEntityManager();
-		Map<String, Object> props = em.getProperties();
-		
-		for (String key : props.keySet()) {
-			System.out.println(key + ": " + props.get(key));
-		}
 	}
 }

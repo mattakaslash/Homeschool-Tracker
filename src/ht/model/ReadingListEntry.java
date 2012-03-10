@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -45,6 +47,10 @@ public class ReadingListEntry {
 	
 	@Column(name = "ASSISTED")
 	private Boolean _assisted;
+	
+	@JoinColumn(name = "STUDENT_ID")
+	@OneToOne
+	private Student _student;
 
 	/**
 	 * Creates a default reading list entry.
@@ -56,6 +62,7 @@ public class ReadingListEntry {
 		setFinished(null);
 		setProgress(0);
 		setAssisted(Boolean.FALSE);
+		setStudent(null);
 	}
 
 	/**
@@ -161,5 +168,19 @@ public class ReadingListEntry {
 	 */
 	private void setAssisted(Boolean assisted) {
 		_assisted = assisted;
+	}
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return _student;
+	}
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		_student = student;
 	}
 }

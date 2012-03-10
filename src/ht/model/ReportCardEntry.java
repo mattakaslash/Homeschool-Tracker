@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -39,8 +40,15 @@ public class ReportCardEntry {
 	@JoinColumn(name = "SUBJECT_ID")
 	private Subject _topic;
 	
-	@Column(name = "RATING")
-	private String _rating;
+	@Column(name = "GRADE")
+	private String _grade;
+	
+	@Column(name = "PROFICIENCY")
+	private String _proficiency;
+	
+	@JoinColumn(name = "STUDENT_ID")
+	@OneToOne
+	private Student _student;
 	
 	/**
 	 * Creates a default report card entry for the current year and quarter.
@@ -49,7 +57,9 @@ public class ReportCardEntry {
 		setYearStarting(SchoolYear.getStart());
 		setQuarter(SchoolYear.getQuarter(getYearStarting(), new Date()));
 		setTopic(null);
-		setRating("(none)");
+		setGrade(null);
+		setProficiency(null);
+		setStudent(null);
 	}
 	
 	/**
@@ -100,16 +110,46 @@ public class ReportCardEntry {
 	private void setTopic(Subject topic) {
 		_topic = topic;
 	}
+
 	/**
-	 * @return the rating
+	 * @return the grade
 	 */
-	private String getRating() {
-		return _rating;
+	private String getGrade() {
+		return _grade;
 	}
+
 	/**
-	 * @param rating the rating to set
+	 * @param grade the grade to set
 	 */
-	private void setRating(String rating) {
-		_rating = rating;
+	private void setGrade(String grade) {
+		_grade = grade;
+	}
+
+	/**
+	 * @return the proficiency
+	 */
+	private String getProficiency() {
+		return _proficiency;
+	}
+
+	/**
+	 * @param proficiency the proficiency to set
+	 */
+	private void setProficiency(String proficiency) {
+		_proficiency = proficiency;
+	}
+
+	/**
+	 * @return the student
+	 */
+	private Student getStudent() {
+		return _student;
+	}
+
+	/**
+	 * @param student the student to set
+	 */
+	private void setStudent(Student student) {
+		_student = student;
 	}
 }

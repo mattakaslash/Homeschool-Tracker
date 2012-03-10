@@ -11,6 +11,7 @@
 		<class>ht.model.PlannerEntry</class>
 		<class>ht.model.ReadingListEntry</class>
 		<class>ht.model.ReportCardEntry</class>
+		<class>ht.model.Student</class>
 		<class>ht.model.Subject</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />

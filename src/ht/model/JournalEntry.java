@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -36,6 +37,10 @@ public class JournalEntry {
 	@JoinColumn(name = "TOPIC_ID")
 	private Concept _topic;
 	
+	@JoinColumn(name = "STUDENT_ID")
+	@OneToOne
+	private Student _student;
+	
 	/**
 	 * Creates a new blank journal entry for today.
 	 */
@@ -43,6 +48,7 @@ public class JournalEntry {
 		setIntroduced(new Date());
 		setMastered(null);
 		setTopic(null);
+		setStudent(null);
 	}
 
 	/**
@@ -99,5 +105,19 @@ public class JournalEntry {
 	 */
 	private void setTopic(Concept topic) {
 		_topic = topic;
+	}
+
+	/**
+	 * @return the student
+	 */
+	public Student getStudent() {
+		return _student;
+	}
+
+	/**
+	 * @param student the student to set
+	 */
+	public void setStudent(Student student) {
+		_student = student;
 	}
 }
