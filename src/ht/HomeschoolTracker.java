@@ -3,6 +3,8 @@
  */
 package ht;
 
+import ht.view.MainFrame;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -16,9 +18,27 @@ public class HomeschoolTracker {
 	private static EntityManagerFactory factory;
 
 	/**
+	 * @return the factory
+	 */
+	public static EntityManagerFactory getFactory() {
+		return factory;
+	}
+
+	/**
+	 * @param factory the factory to set
+	 */
+	public static void setFactory(EntityManagerFactory factory) {
+		HomeschoolTracker.factory = factory;
+	}
+
+	/**
 	 * @param args unused
 	 */
 	public static void main(String[] args) {
-		factory = Persistence.createEntityManagerFactory("records");
+		setFactory(Persistence.createEntityManagerFactory("records"));
+		MainFrame frame = new MainFrame();
+		frame.setDefaultCloseOperation(MainFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 	}
 }
