@@ -33,7 +33,7 @@ public class ConfigurationEntry {
 	/**
 	 * @return the name
 	 */
-	private String getName() {
+	public String getName() {
 		return _name;
 	}
 
@@ -47,7 +47,7 @@ public class ConfigurationEntry {
 	/**
 	 * @return the value
 	 */
-	private String getValue() {
+	public String getValue() {
 		return _value;
 	}
 
@@ -56,5 +56,12 @@ public class ConfigurationEntry {
 	 */
 	private void setValue(String value) {
 		_value = value;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return getName() + ": " + getValue();
 	}
 }

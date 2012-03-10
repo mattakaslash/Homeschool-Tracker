@@ -5,6 +5,7 @@ package ht;
 
 import ht.view.MainFrame;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -36,9 +37,15 @@ public class HomeschoolTracker {
 	 */
 	public static void main(String[] args) {
 		setFactory(Persistence.createEntityManagerFactory("records"));
+		createOrUpgradeDB();
 		MainFrame frame = new MainFrame();
 		frame.setDefaultCloseOperation(MainFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+	}
+
+	private static void createOrUpgradeDB() {
+		EntityManager em = getFactory().createEntityManager();
+		em.close();
 	}
 }

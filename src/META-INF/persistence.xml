@@ -3,7 +3,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 	<persistence-unit name="records" transaction-type="RESOURCE_LOCAL">
+		<class>ht.model.Assignment</class>
+		<class>ht.model.Category</class>
 		<class>ht.model.Concept</class>
+		<class>ht.model.ConfigurationEntry</class>
 		<class>ht.model.CurriculumLogEntry</class>
 		<class>ht.model.Day</class>
 		<class>ht.model.FieldTrip</class>
