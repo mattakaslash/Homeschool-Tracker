@@ -123,6 +123,24 @@ public class Student {
 	public void setBirthdate(Date birthdate) {
 		_birthdate = birthdate;
 	}
+	
+	/* (non-javadoc)
+	 * @see java.lang.Object#toString
+	 */
+	@Override
+	public String toString() {
+		String result = "";
+		if (getFirstName() != null) {
+			result += getFirstName();
+		}
+		if (getMiddleName() != null) {
+			result += " " + getMiddleName();
+		}
+		if (getLastName() != null) {
+			result += " " + getLastName();
+		}
+		return result.trim();
+	}
 
 	/**
 	 * @return a list of all students
@@ -137,13 +155,26 @@ public class Student {
 	}
 
 	/**
+	 * Deletes the provided student.
+	 * @param student the student to be deleted
+	 */
+	public static void remove(Student student) {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		Student s = em.merge(student);
+		em.getTransaction().begin();
+		em.remove(s);
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	/**
 	 * Saves a given student to the database.
 	 * @param student
 	 */
 	public static void save(Student student) {
 		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
 		em.getTransaction().begin();
-		em.persist(student);
+		em.merge(student);
 		em.getTransaction().commit();
 		em.close();
 	}

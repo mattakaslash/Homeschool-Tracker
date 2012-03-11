@@ -10,6 +10,8 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
@@ -35,10 +37,6 @@ import org.jbundle.thin.base.screen.jcalendarbutton.JCalendarButton;
  * @since 1.0
  */
 //VS4E -- DO NOT REMOVE THIS LINE!
-/**
- * @author Matthew Rinehart &lt;gomamon2k at yahoo.com&gt;
- *
- */
 public class StudentForm extends JDialog {
 	/**
 	 * Date format for date text field.
@@ -217,6 +215,12 @@ public class StudentForm extends JDialog {
 		add(getJTextFieldBirthDate(), new Constraints(new Bilateral(112, 40, 4), new Leading(86, 12, 12)));
 		add(getJButtonCancel(), new Constraints(new Bilateral(112, 118, 75), new Leading(112, 12, 12)));
 		add(getJButtonSave(), new Constraints(new Trailing(12, 100, 199, 199), new Leading(112, 12, 12)));
+		addWindowListener(new WindowAdapter() {
+	
+			public void windowOpened(WindowEvent event) {
+				windowWindowOpened(event);
+			}
+		});
 		pack();
 	}
 
@@ -260,5 +264,19 @@ public class StudentForm extends JDialog {
 	 */
 	public void setStudent(Student student) {
 		_student = student;
+	}
+
+	/**
+	 * Event: Window opened.
+	 * @param event
+	 */
+	private void windowWindowOpened(WindowEvent event) {
+		if (getStudent() != null) {
+			getJTextFieldFirstName().setText(getStudent().getFirstName());
+			getJTextFieldMiddleName().setText(getStudent().getMiddleName());
+			getJTextFieldLastName().setText(getStudent().getLastName());
+			getJButtonCalendar().setTargetDate(getStudent().getBirthdate());
+			jButtonCalendarPropertyChangePropertyChange(new PropertyChangeEvent(this, null, null, getStudent().getBirthdate()));
+		}
 	}
 }

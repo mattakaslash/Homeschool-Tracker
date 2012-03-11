@@ -8,6 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -17,6 +21,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -79,6 +84,13 @@ public class MainFrame extends JFrame {
 		if (jButtonStudentsDelete == null) {
 			jButtonStudentsDelete = new JButton();
 			jButtonStudentsDelete.setText("Delete");
+			jButtonStudentsDelete.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					jButtonStudentsDeleteActionActionPerformed(event);
+				}
+			});
 		}
 		return jButtonStudentsDelete;
 	}
@@ -87,6 +99,13 @@ public class MainFrame extends JFrame {
 		if (jButtonStudentsEdit == null) {
 			jButtonStudentsEdit = new JButton();
 			jButtonStudentsEdit.setText("Edit");
+			jButtonStudentsEdit.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					jButtonStudentsEditActionActionPerformed(event);
+				}
+			});
 		}
 		return jButtonStudentsEdit;
 	}
@@ -111,6 +130,12 @@ public class MainFrame extends JFrame {
 			jListStudentList = new JList();
 			DefaultListModel listModel = new DefaultListModel();
 			jListStudentList.setModel(listModel);
+			jListStudentList.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jListStudentListMouseMouseClicked(event);
+				}
+			});
 		}
 		return jListStudentList;
 	}
@@ -212,6 +237,44 @@ public class MainFrame extends JFrame {
 			Student.save(form.getStudent());
 			refreshStudentList();
 		}
+		form.dispose();
+	}
+
+	/**
+	 * Event: Students tab, Delete pressed.
+	 * @param event
+	 */
+	private void jButtonStudentsDeleteActionActionPerformed(ActionEvent event) {
+		String output = "";
+		List<Student> toDelete = new ArrayList<Student>();
+		for (Object s : getJListStudentList().getSelectedValues()) {
+			output += ((Student) s).toString() + "\n";
+			toDelete.add((Student) s);
+		}
+		int n = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the following students?\n\n" + output.trim(),
+				"Delete students?", JOptionPane.YES_NO_OPTION);
+		if (n == JOptionPane.YES_OPTION) {
+			for (Object s : getJListStudentList().getSelectedValues()) {
+				Student.remove((Student) s);
+			}
+			refreshStudentList();
+		}
+	}
+
+	/**
+	 * Event: Students tab, Edit pressed.
+	 * @param event
+	 */
+	private void jButtonStudentsEditActionActionPerformed(ActionEvent event) {
+		Student s = (Student) getJListStudentList().getSelectedValue();
+		StudentForm form = new StudentForm(this);
+		form.setStudent(s);
+		form.setVisible(true);
+		if (form.getStudent() != null) {
+			Student.save(form.getStudent());
+			refreshStudentList();
+		}
+		form.dispose();
 	}
 
 	/**
@@ -230,6 +293,16 @@ public class MainFrame extends JFrame {
 		((DefaultListModel) getJListStudentList().getModel()).clear();
 		for (Student s : Student.getAll()) {
 			((DefaultListModel) getJListStudentList().getModel()).addElement(s);
+		}
+	}
+
+	/**
+	 * Event: Student list, mouse clicked.
+	 * @param event
+	 */
+	private void jListStudentListMouseMouseClicked(MouseEvent event) {
+		if (event.getClickCount() == 2) {
+			getJButtonStudentsEdit().doClick();
 		}
 	}
 }
