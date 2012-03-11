@@ -3,13 +3,18 @@
  */
 package ht.model;
 
+import ht.HomeschoolTracker;
+
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Query;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -73,7 +78,7 @@ public class Student {
 	/**
 	 * @param firstName the firstName to set
 	 */
-	private void setFirstName(String firstName) {
+	public void setFirstName(String firstName) {
 		_firstName = firstName;
 	}
 
@@ -87,7 +92,7 @@ public class Student {
 	/**
 	 * @param middleName the middleName to set
 	 */
-	private void setMiddleName(String middleName) {
+	public void setMiddleName(String middleName) {
 		_middleName = middleName;
 	}
 
@@ -101,7 +106,7 @@ public class Student {
 	/**
 	 * @param lastName the lastName to set
 	 */
-	private void setLastName(String lastName) {
+	public void setLastName(String lastName) {
 		_lastName = lastName;
 	}
 
@@ -115,7 +120,29 @@ public class Student {
 	/**
 	 * @param birthdate the birthdate to set
 	 */
-	private void setBirthdate(Date birthdate) {
+	public void setBirthdate(Date birthdate) {
 		_birthdate = birthdate;
+	}
+
+	/**
+	 * @return a list of all students
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Student> getAll() {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		Query q = em.createQuery("SELECT s FROM Student s");
+		List<Student> results = q.getResultList();
+		em.close();
+		return results;
+	}
+
+	/**
+	 * Saves a given student to the database.
+	 * @param student
+	 */
+	public static void save(Student student) {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		em.persist(student);
+		em.close();
 	}
 }

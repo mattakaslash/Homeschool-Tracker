@@ -1,8 +1,12 @@
 package ht.view;
 
+import ht.model.Student;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -60,6 +64,12 @@ public class MainFrame extends JFrame {
 		if (jButtonStudentsAdd == null) {
 			jButtonStudentsAdd = new JButton();
 			jButtonStudentsAdd.setText("Add");
+			jButtonStudentsAdd.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					jButtonStudentsAddActionActionPerformed(event);
+				}
+			});
 		}
 		return jButtonStudentsAdd;
 	}
@@ -148,6 +158,12 @@ public class MainFrame extends JFrame {
 			jPanelStudents.add(getJButtonStudentsDelete(), new Constraints(new Trailing(12, 92, 46, 410), new Leading(105, 12, 12)));
 			jPanelStudents.add(getJButtonStudentsAdd(), new Constraints(new Trailing(12, 92, 46, 410), new Leading(12, 12, 12)));
 			jPanelStudents.add(getJScrollPaneStudentList(), new Constraints(new Bilateral(12, 110, 22), new Bilateral(13, 12, 22)));
+			jPanelStudents.addComponentListener(new ComponentAdapter() {
+	
+				public void componentShown(ComponentEvent event) {
+					jPanelStudentsComponentComponentShown(event);
+				}
+			});
 		}
 		return jPanelStudents;
 	}
@@ -175,12 +191,43 @@ public class MainFrame extends JFrame {
 		setJMenuBar(getJMenuBarMain());
 		setSize(800, 600);
 	}
-	
+
 	/**
 	 * Event: File > Exit clicked.
 	 * @param event
 	 */
 	private void jMenuItemFileExitActionActionPerformed(ActionEvent event) {
 		this.dispose();
+	}
+
+	/**
+	 * Event: Students tab, Add pressed.
+	 * @param event
+	 */
+	private void jButtonStudentsAddActionActionPerformed(ActionEvent event) {
+		StudentForm form = new StudentForm(this);
+		form.setVisible(true);
+		if (form.getStudent() != null) {
+			Student.save(form.getStudent());
+			refreshStudentList();
+		}
+	}
+
+	/**
+	 * Event: Students tab selected.
+	 * @param event
+	 */
+	private void jPanelStudentsComponentComponentShown(ComponentEvent event) {
+		refreshStudentList();
+	}
+
+	/**
+	 * Reloads the list of students from the database.
+	 */
+	private void refreshStudentList() {
+		((DefaultListModel) getJListStudentList().getModel()).clear();
+		for (Student s : Student.getAll()) {
+			((DefaultListModel) getJListStudentList().getModel()).addElement(s);
+		}
 	}
 }
