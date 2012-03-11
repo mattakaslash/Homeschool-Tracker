@@ -3,22 +3,12 @@
  */
 package ht;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
-import ht.model.ConfigurationEntry;
+import ht.view.InitFrame;
 import ht.view.MainFrame;
 
 import javax.persistence.EntityManager;
@@ -55,15 +45,17 @@ public class HomeschoolTracker {
 	public static void main(String[] args) {
 		setFactory(Persistence.createEntityManagerFactory("records"));
 		try {
-			createOrUpgradeDB();
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null,
-					"Encountered SQLException while trying to create or upgrade the database.\n\n" + e.getLocalizedMessage());
-			e.printStackTrace();
-			return;
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null,
-					"Encountered IOException while trying to create or upgrade the database.\n\n" + e.getLocalizedMessage());
+			// TODO: display splash screen 
+			boolean dbExists = databaseExists();
+			// TODO: remove splash screen
+			if (!dbExists) {
+				InitFrame frame = new InitFrame();
+				frame.setLocationRelativeTo(null);
+				frame.setVisible(true);
+			}
+		} catch (Exception e) {
+			JOptionPane
+					.showMessageDialog(null, "Caught an exception trying to initialize the database: " + e.getLocalizedMessage());
 			e.printStackTrace();
 			return;
 		}
@@ -73,27 +65,15 @@ public class HomeschoolTracker {
 		frame.setVisible(true);
 	}
 
-	private static void createOrUpgradeDB() throws SQLException, IOException {
+	private static boolean databaseExists() throws SQLException {
 		EntityManager em = getFactory().createEntityManager();
 		String connStr = (String) em.getProperties().get("javax.persistence.jdbc.url");
-		Connection conn	= DriverManager.getConnection(connStr);
+		Connection conn = DriverManager.getConnection(connStr);
 		DatabaseMetaData dbmd = conn.getMetaData();
-		ResultSet rs = dbmd.getTables(null, "APP", "CONFIGURATIONENTRY", null);
-		if(!rs.next()) {
-			// no ConfigurationEntry table exists; we must create the tables
-			Statement s = conn.createStatement();
-			InputStream in = new FileInputStream("createDDL.jdbc");
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String line;
-			while ((line = br.readLine()) != null) {
-				s.executeUpdate(line);
-			}
-			
-			em.getTransaction().begin();
-			em.persist(new ConfigurationEntry("VERSION", "1.0"));
-			em.getTransaction().commit();
-		}
+		ResultSet rs = dbmd.getTables(null, null, "CONFIGURATIONENTRY", null);
+		boolean result = rs.next();
 		conn.close();
 		em.close();
+		return result;
 	}
 }
