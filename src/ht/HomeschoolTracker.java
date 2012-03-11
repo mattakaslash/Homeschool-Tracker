@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import ht.view.InitFrame;
 import ht.view.MainFrame;
+import ht.view.SplashScreen;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -44,10 +45,13 @@ public class HomeschoolTracker {
 	 */
 	public static void main(String[] args) {
 		setFactory(Persistence.createEntityManagerFactory("records"));
+		SplashScreen splash = new SplashScreen();
+		splash.setLocationRelativeTo(null);
 		try {
-			// TODO: display splash screen 
+			splash.setVisible(true);
 			boolean dbExists = databaseExists();
-			// TODO: remove splash screen
+			splash.setVisible(false);
+			splash.dispose();
 			if (!dbExists) {
 				InitFrame frame = new InitFrame();
 				frame.setLocationRelativeTo(null);

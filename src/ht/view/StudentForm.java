@@ -79,6 +79,7 @@ public class StudentForm extends JDialog {
 	public StudentForm(Frame parent) {
 		super(parent);
 		initComponents();
+		setLocationRelativeTo(parent);
 	}
 
 	private JCalendarButton getJButtonCalendar() {
