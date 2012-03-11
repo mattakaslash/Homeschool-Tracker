@@ -1,6 +1,7 @@
 package ht.view;
 
 import ht.model.Student;
+import ht.view.render.StudentCellRenderer;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -225,6 +226,7 @@ public class MainFrame extends JFrame {
 	 * Reloads the list of students from the database.
 	 */
 	private void refreshStudentList() {
+		getJListStudentList().setCellRenderer(new StudentCellRenderer());
 		((DefaultListModel) getJListStudentList().getModel()).clear();
 		for (Student s : Student.getAll()) {
 			((DefaultListModel) getJListStudentList().getModel()).addElement(s);

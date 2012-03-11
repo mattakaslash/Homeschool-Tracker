@@ -71,7 +71,7 @@ public class Student {
 	/**
 	 * @return the firstName
 	 */
-	private String getFirstName() {
+	public String getFirstName() {
 		return _firstName;
 	}
 
@@ -85,7 +85,7 @@ public class Student {
 	/**
 	 * @return the middleName
 	 */
-	private String getMiddleName() {
+	public String getMiddleName() {
 		return _middleName;
 	}
 
@@ -99,7 +99,7 @@ public class Student {
 	/**
 	 * @return the lastName
 	 */
-	private String getLastName() {
+	public String getLastName() {
 		return _lastName;
 	}
 
@@ -113,7 +113,7 @@ public class Student {
 	/**
 	 * @return the birthdate
 	 */
-	private Date getBirthdate() {
+	public Date getBirthdate() {
 		return _birthdate;
 	}
 
@@ -142,7 +142,9 @@ public class Student {
 	 */
 	public static void save(Student student) {
 		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		em.getTransaction().begin();
 		em.persist(student);
+		em.getTransaction().commit();
 		em.close();
 	}
 }
