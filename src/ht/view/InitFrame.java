@@ -114,7 +114,7 @@ public class InitFrame extends JDialog {
 	}
 
 	private void taskPropertyChange(PropertyChangeEvent evt) {
-		if ("progress" == evt.getPropertyName()) {
+		if ("progress".equals(evt.getPropertyName())) {
 			int progress = (Integer) evt.getNewValue();
 			getJProgressBarInit().setString("Step " + progress + " of " + getJProgressBarInit().getMaximum());
 			getJProgressBarInit().setValue(progress);
