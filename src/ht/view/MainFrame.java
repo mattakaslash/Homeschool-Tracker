@@ -336,6 +336,9 @@ public class MainFrame extends JFrame {
 		if (jTableMay == null) {
 			jTableMay = new JTable();
 			jTableMay.setModel(new MonthTableModel(5, getSelectedYear()));
+			jTableMay.setRowSelectionAllowed(false);
+			jTableMay.setShowHorizontalLines(false);
+			jTableMay.setShowVerticalLines(false);
 		}
 		return jTableMay;
 	}
@@ -352,6 +355,9 @@ public class MainFrame extends JFrame {
 		if (jTableApril == null) {
 			jTableApril = new JTable();
 			jTableApril.setModel(new MonthTableModel(4, getSelectedYear()));
+			jTableApril.setRowSelectionAllowed(false);
+			jTableApril.setShowHorizontalLines(false);
+			jTableApril.setShowVerticalLines(false);
 		}
 		return jTableApril;
 	}
@@ -368,6 +374,9 @@ public class MainFrame extends JFrame {
 		if (jTableMarch == null) {
 			jTableMarch = new JTable();
 			jTableMarch.setModel(new MonthTableModel(3, getSelectedYear()));
+			jTableMarch.setRowSelectionAllowed(false);
+			jTableMarch.setShowHorizontalLines(false);
+			jTableMarch.setShowVerticalLines(false);
 		}
 		return jTableMarch;
 	}
@@ -384,6 +393,9 @@ public class MainFrame extends JFrame {
 		if (jTableFebruary == null) {
 			jTableFebruary = new JTable();
 			jTableFebruary.setModel(new MonthTableModel(2, getSelectedYear() + 1));
+			jTableFebruary.setRowSelectionAllowed(false);
+			jTableFebruary.setShowHorizontalLines(false);
+			jTableFebruary.setShowVerticalLines(false);
 		}
 		return jTableFebruary;
 	}
@@ -400,6 +412,9 @@ public class MainFrame extends JFrame {
 		if (jTableJanuary == null) {
 			jTableJanuary = new JTable();
 			jTableJanuary.setModel(new MonthTableModel(1, getSelectedYear() + 1));
+			jTableJanuary.setRowSelectionAllowed(false);
+			jTableJanuary.setShowHorizontalLines(false);
+			jTableJanuary.setShowVerticalLines(false);
 		}
 		return jTableJanuary;
 	}
@@ -461,6 +476,9 @@ public class MainFrame extends JFrame {
 		if (jTableDecember == null) {
 			jTableDecember = new JTable();
 			jTableDecember.setModel(new MonthTableModel(12, getSelectedYear()));
+			jTableDecember.setRowSelectionAllowed(false);
+			jTableDecember.setShowHorizontalLines(false);
+			jTableDecember.setShowVerticalLines(false);
 		}
 		return jTableDecember;
 	}
@@ -477,6 +495,9 @@ public class MainFrame extends JFrame {
 		if (jTableNovember == null) {
 			jTableNovember = new JTable();
 			jTableNovember.setModel(new MonthTableModel(11, getSelectedYear()));
+			jTableNovember.setRowSelectionAllowed(false);
+			jTableNovember.setShowHorizontalLines(false);
+			jTableNovember.setShowVerticalLines(false);
 		}
 		return jTableNovember;
 	}
@@ -493,6 +514,9 @@ public class MainFrame extends JFrame {
 		if (jTableOctober == null) {
 			jTableOctober = new JTable();
 			jTableOctober.setModel(new MonthTableModel(10, getSelectedYear()));
+			jTableOctober.setRowSelectionAllowed(false);
+			jTableOctober.setShowHorizontalLines(false);
+			jTableOctober.setShowVerticalLines(false);
 		}
 		return jTableOctober;
 	}
@@ -509,6 +533,9 @@ public class MainFrame extends JFrame {
 		if (jTableSeptember == null) {
 			jTableSeptember = new JTable();
 			jTableSeptember.setModel(new MonthTableModel(9, getSelectedYear()));
+			jTableSeptember.setRowSelectionAllowed(false);
+			jTableSeptember.setShowHorizontalLines(false);
+			jTableSeptember.setShowVerticalLines(false);
 		}
 		return jTableSeptember;
 	}
@@ -525,6 +552,9 @@ public class MainFrame extends JFrame {
 		if (jTableAugust == null) {
 			jTableAugust = new JTable();
 			jTableAugust.setModel(new MonthTableModel(8, getSelectedYear()));
+			jTableAugust.setRowSelectionAllowed(false);
+			jTableAugust.setShowHorizontalLines(false);
+			jTableAugust.setShowVerticalLines(false);
 		}
 		return jTableAugust;
 	}
@@ -559,6 +589,9 @@ public class MainFrame extends JFrame {
 		if (jTableJuly == null) {
 			jTableJuly = new JTable();
 			jTableJuly.setModel(new MonthTableModel(7, getSelectedYear()));
+			jTableJuly.setRowSelectionAllowed(false);
+			jTableJuly.setShowHorizontalLines(false);
+			jTableJuly.setShowVerticalLines(false);
 		}
 		return jTableJuly;
 	}
@@ -575,6 +608,9 @@ public class MainFrame extends JFrame {
 		if (jTableJune == null) {
 			jTableJune = new JTable();
 			jTableJune.setModel(new MonthTableModel(6, getSelectedYear()));
+			jTableJune.setRowSelectionAllowed(false);
+			jTableJune.setShowHorizontalLines(false);
+			jTableJune.setShowVerticalLines(false);
 		}
 		return jTableJune;
 	}
