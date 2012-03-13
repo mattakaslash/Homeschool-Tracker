@@ -1,5 +1,6 @@
 package ht.view;
 
+import ht.model.Day;
 import ht.model.MonthTableModel;
 import ht.model.Student;
 import ht.view.render.StudentCellRenderer;
@@ -32,6 +33,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
@@ -45,23 +47,28 @@ import org.dyno.visual.swing.layouts.Trailing;
  * @author Matthew Rinehart &lt;gomamon2k at yahoo.com&gt;
  * @since 1.0
  */
-//VS4E -- DO NOT REMOVE THIS LINE!
+// VS4E -- DO NOT REMOVE THIS LINE!
 public class MainFrame extends JFrame {
 	/**
-	 * Generated. 
+	 * Generated.
 	 */
 	private static final long serialVersionUID = 8444716793871398441L;
-	
+
+	/**
+	 * Stores the currently-selected school day.
+	 */
+	private Day _selectedDay = null;
+
 	/**
 	 * Stores the currently-selected student from the students tab.
 	 */
 	private Student _selectedStudent = null;
-	
+
 	/**
 	 * Stores the currently selected year from the year tab.
 	 */
 	private Integer _selectedYear = Calendar.getInstance().get(Calendar.YEAR);
-	
+
 	private JButton jButtonNextYear;
 	private JButton jButtonPrevYear;
 	private JButton jButtonStudentsAdd;
@@ -88,6 +95,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem jMenuItemFileExit;
 	private JPanel jPanelStudents;
 	private JPanel jPanelYear;
+	private JPanel jPanelYearPicker;
 	private JScrollPane jScrollPaneApril;
 	private JScrollPane jScrollPaneAugust;
 	private JScrollPane jScrollPaneDecember;
@@ -113,9 +121,8 @@ public class MainFrame extends JFrame {
 	private JTable jTableMay;
 	private JTable jTableNovember;
 	private JTable jTableOctober;
-	private JTable jTableSeptember;
 
-	private JPanel jPanelYearPicker;
+	private JTable jTableSeptember;
 
 	/**
 	 * Defines a new frame.
@@ -124,12 +131,27 @@ public class MainFrame extends JFrame {
 		initComponents();
 	}
 
+	private void clearAllTableSelections() {
+		getJTableJanuary().getSelectionModel().clearSelection();
+		getJTableFebruary().getSelectionModel().clearSelection();
+		getJTableMarch().getSelectionModel().clearSelection();
+		getJTableApril().getSelectionModel().clearSelection();
+		getJTableMay().getSelectionModel().clearSelection();
+		getJTableJune().getSelectionModel().clearSelection();
+		getJTableJuly().getSelectionModel().clearSelection();
+		getJTableAugust().getSelectionModel().clearSelection();
+		getJTableSeptember().getSelectionModel().clearSelection();
+		getJTableOctober().getSelectionModel().clearSelection();
+		getJTableNovember().getSelectionModel().clearSelection();
+		getJTableDecember().getSelectionModel().clearSelection();
+	}
+
 	private JButton getJButtonNextYear() {
 		if (jButtonNextYear == null) {
 			jButtonNextYear = new JButton();
 			jButtonNextYear.setText(">");
 			jButtonNextYear.addActionListener(new ActionListener() {
-	
+
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					jButtonNextYearActionActionPerformed(event);
@@ -144,7 +166,7 @@ public class MainFrame extends JFrame {
 			jButtonPrevYear = new JButton();
 			jButtonPrevYear.setText("<");
 			jButtonPrevYear.addActionListener(new ActionListener() {
-	
+
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					jButtonPrevYearActionActionPerformed(event);
@@ -159,7 +181,7 @@ public class MainFrame extends JFrame {
 			jButtonStudentsAdd = new JButton();
 			jButtonStudentsAdd.setText("Add");
 			jButtonStudentsAdd.addActionListener(new ActionListener() {
-	
+
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					jButtonStudentsAddActionActionPerformed(event);
@@ -174,7 +196,7 @@ public class MainFrame extends JFrame {
 			jButtonStudentsDelete = new JButton();
 			jButtonStudentsDelete.setText("Delete");
 			jButtonStudentsDelete.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					jButtonStudentsDeleteActionActionPerformed(event);
@@ -189,7 +211,7 @@ public class MainFrame extends JFrame {
 			jButtonStudentsEdit = new JButton();
 			jButtonStudentsEdit.setText("Edit");
 			jButtonStudentsEdit.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					jButtonStudentsEditActionActionPerformed(event);
@@ -204,7 +226,7 @@ public class MainFrame extends JFrame {
 			jButtonStudentsOpen = new JButton();
 			jButtonStudentsOpen.setText("Open");
 			jButtonStudentsOpen.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					jButtonStudentsOpenActionActionPerformed(event);
@@ -345,7 +367,7 @@ public class MainFrame extends JFrame {
 			DefaultListModel listModel = new DefaultListModel();
 			jListStudentList.setModel(listModel);
 			jListStudentList.addMouseListener(new MouseAdapter() {
-	
+
 				@Override
 				public void mouseClicked(MouseEvent event) {
 					jListStudentListMouseMouseClicked(event);
@@ -380,7 +402,7 @@ public class MainFrame extends JFrame {
 			jMenuItemFileExit.setMnemonic('X');
 			jMenuItemFileExit.setAccelerator(KeyStroke.getKeyStroke("alt pressed F4"));
 			jMenuItemFileExit.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					jMenuItemFileExitActionActionPerformed(event);
@@ -396,11 +418,12 @@ public class MainFrame extends JFrame {
 			jPanelStudents.setLayout(new GroupLayout());
 			jPanelStudents.add(getJButtonStudentsEdit(), new Constraints(new Trailing(12, 92, 46, 410), new Leading(74, 12, 12)));
 			jPanelStudents.add(getJButtonStudentsOpen(), new Constraints(new Trailing(12, 92, 46, 410), new Leading(43, 12, 12)));
-			jPanelStudents.add(getJButtonStudentsDelete(), new Constraints(new Trailing(12, 92, 46, 410), new Leading(105, 12, 12)));
+			jPanelStudents
+					.add(getJButtonStudentsDelete(), new Constraints(new Trailing(12, 92, 46, 410), new Leading(105, 12, 12)));
 			jPanelStudents.add(getJButtonStudentsAdd(), new Constraints(new Trailing(12, 92, 46, 410), new Leading(12, 12, 12)));
 			jPanelStudents.add(getJScrollPaneStudentList(), new Constraints(new Bilateral(12, 110, 22), new Bilateral(13, 12, 22)));
 			jPanelStudents.addComponentListener(new ComponentAdapter() {
-	
+
 				@Override
 				public void componentShown(ComponentEvent event) {
 					jPanelStudentsComponentComponentShown(event);
@@ -440,13 +463,25 @@ public class MainFrame extends JFrame {
 			jPanelYear.add(getJScrollPaneMay(), new Constraints(new Leading(427, 200, 10, 10), new Leading(490, 115, 12, 12)));
 			jPanelYear.add(getJPanelYearPicker(), new Constraints(new Leading(12, 616, 12, 12), new Leading(0, 44, 12, 12)));
 			jPanelYear.addComponentListener(new ComponentAdapter() {
-	
+
+				@Override
 				public void componentShown(ComponentEvent event) {
 					jPanelYearComponentComponentShown(event);
 				}
 			});
 		}
 		return jPanelYear;
+	}
+
+	private JPanel getJPanelYearPicker() {
+		if (jPanelYearPicker == null) {
+			jPanelYearPicker = new JPanel();
+			jPanelYearPicker.setLayout(new GroupLayout());
+			jPanelYearPicker.add(getJButtonPrevYear(), new Constraints(new Leading(12, 48, 48), new Leading(11, 12, 12)));
+			jPanelYearPicker.add(getJButtonNextYear(), new Constraints(new Trailing(12, 48, 48), new Leading(11, 12, 12)));
+			jPanelYearPicker.add(getJLabelYear(), new Constraints(new Bilateral(65, 65, 36), new Leading(12, 12, 12)));
+		}
+		return jPanelYearPicker;
 	}
 
 	private JScrollPane getJScrollPaneApril() {
@@ -631,10 +666,28 @@ public class MainFrame extends JFrame {
 	private JTable getJTableJune() {
 		if (jTableJune == null) {
 			jTableJune = new JTable();
-			jTableJune.setModel(new MonthTableModel(6, getSelectedYear()));
+			jTableJune.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null, null, 1, 2, },
+					{ 3, 4, 5, 6, 7, 8, 9, }, { 10, 11, 12, 13, 14, 15, 16, }, { 17, 18, 19, 20, 21, 22, 23, },
+					{ 24, 25, 26, 27, 28, 29, 30, }, }, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
+						Integer.class, Integer.class, };
+
+				@Override
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableJune.setRowSelectionAllowed(false);
 			jTableJune.setShowHorizontalLines(false);
 			jTableJune.setShowVerticalLines(false);
+			jTableJune.addMouseListener(new MouseAdapter() {
+
+				@Override
+				public void mouseClicked(MouseEvent event) {
+					jTableJuneMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableJune;
 	}
@@ -695,6 +748,13 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
+	 * @return the selectedDay
+	 */
+	public Day getSelectedDay() {
+		return _selectedDay;
+	}
+
+	/**
 	 * @return the selectedStudent
 	 */
 	public Student getSelectedStudent() {
@@ -718,19 +778,9 @@ public class MainFrame extends JFrame {
 		setSize(1099, 668);
 	}
 
-	private JPanel getJPanelYearPicker() {
-		if (jPanelYearPicker == null) {
-			jPanelYearPicker = new JPanel();
-			jPanelYearPicker.setLayout(new GroupLayout());
-			jPanelYearPicker.add(getJButtonPrevYear(), new Constraints(new Leading(12, 48, 48), new Leading(11, 12, 12)));
-			jPanelYearPicker.add(getJButtonNextYear(), new Constraints(new Trailing(12, 48, 48), new Leading(11, 12, 12)));
-			jPanelYearPicker.add(getJLabelYear(), new Constraints(new Bilateral(65, 65, 36), new Leading(12, 12, 12)));
-		}
-		return jPanelYearPicker;
-	}
-
 	/**
 	 * Event: Next year button pressed.
+	 * 
 	 * @param event
 	 */
 	private void jButtonNextYearActionActionPerformed(ActionEvent event) {
@@ -741,6 +791,7 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: Previous year button pressed.
+	 * 
 	 * @param event
 	 */
 	private void jButtonPrevYearActionActionPerformed(ActionEvent event) {
@@ -751,6 +802,7 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: Students tab, Add pressed.
+	 * 
 	 * @param event
 	 */
 	private void jButtonStudentsAddActionActionPerformed(ActionEvent event) {
@@ -765,6 +817,7 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: Students tab, Delete pressed.
+	 * 
 	 * @param event
 	 */
 	private void jButtonStudentsDeleteActionActionPerformed(ActionEvent event) {
@@ -779,7 +832,7 @@ public class MainFrame extends JFrame {
 		if (n == JOptionPane.YES_OPTION) {
 			for (Object s : getJListStudentList().getSelectedValues()) {
 				Student.remove((Student) s);
-				if (getSelectedStudent() != null && getSelectedStudent().equals((Student) s)) {
+				if (getSelectedStudent() != null && getSelectedStudent().equals(s)) {
 					setSelectedStudent(null);
 					setTitle("Homeschool Tracker");
 				}
@@ -790,6 +843,7 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: Students tab, Edit pressed.
+	 * 
 	 * @param event
 	 */
 	private void jButtonStudentsEditActionActionPerformed(ActionEvent event) {
@@ -803,9 +857,10 @@ public class MainFrame extends JFrame {
 		}
 		form.dispose();
 	}
-	
+
 	/**
 	 * Event: Students tab, Open pressed.
+	 * 
 	 * @param event
 	 */
 	private void jButtonStudentsOpenActionActionPerformed(ActionEvent event) {
@@ -820,6 +875,7 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: Student list, mouse clicked.
+	 * 
 	 * @param event
 	 */
 	private void jListStudentListMouseMouseClicked(MouseEvent event) {
@@ -830,6 +886,7 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: File > Exit clicked.
+	 * 
 	 * @param event
 	 */
 	private void jMenuItemFileExitActionActionPerformed(ActionEvent event) {
@@ -838,6 +895,7 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: Students tab selected.
+	 * 
 	 * @param event
 	 */
 	private void jPanelStudentsComponentComponentShown(ComponentEvent event) {
@@ -846,13 +904,37 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: Year tab selected.
+	 * 
 	 * @param event
 	 */
 	private void jPanelYearComponentComponentShown(ComponentEvent event) {
 		if (getJLabelYear().getText().contentEquals("0000")) {
 			getJLabelYear().setText(getSelectedYear().toString());
 		}
-		// TODO: highlight attended days
+		// TODO: highlight days
+	}
+
+	/**
+	 * Event: June table, mouse clicked.
+	 * 
+	 * @param event
+	 */
+	private void jTableJuneMouseMouseClicked(MouseEvent event) {
+		JTable month = (JTable) event.getComponent();
+		int row = month.getSelectedRow();
+		int col = month.getSelectedColumn();
+		clearAllTableSelections();
+		month.changeSelection(row, col, false, false);
+		loadDay((Integer) month.getValueAt(row, col), ((MonthTableModel) month.getModel()).getMonth(),
+				((MonthTableModel) month.getModel()).getYear());
+	}
+
+	private void loadDay(Integer date, Integer month, Integer year) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.DAY_OF_MONTH, date);
+		cal.set(Calendar.MONTH, month - 1);
+		cal.set(Calendar.YEAR, year);
+		setSelectedDay(Day.get(cal.getTime()));
 	}
 
 	private void refreshCalenders() {
@@ -885,14 +967,24 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
-	 * @param selectedStudent the selectedStudent to set
+	 * @param selectedDay
+	 *            the selectedDay to set
+	 */
+	public void setSelectedDay(Day selectedDay) {
+		_selectedDay = selectedDay;
+	}
+
+	/**
+	 * @param selectedStudent
+	 *            the selectedStudent to set
 	 */
 	public void setSelectedStudent(Student selectedStudent) {
 		_selectedStudent = selectedStudent;
 	}
 
 	/**
-	 * @param selectedYear the selectedYear to set
+	 * @param selectedYear
+	 *            the selectedYear to set
 	 */
 	public void setSelectedYear(Integer selectedYear) {
 		_selectedYear = selectedYear;

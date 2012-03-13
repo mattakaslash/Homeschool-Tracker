@@ -32,6 +32,22 @@ public class MonthTableModel implements TableModel {
 		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
 		setRef(cal);
 	}
+
+	/**
+	 * Returns the month value, where January is 1
+	 * @return the month
+	 */
+	public Integer getMonth() {
+		return getRef().get(Calendar.MONTH) + 1;
+	}
+	
+	/**
+	 * Returns the year reference for the month.
+	 * @return the year
+	 */
+	public Integer getYear() {
+		return getRef().get(Calendar.YEAR);
+	}
 	
 	/**
 	 * Sets the year reference for the month.
@@ -146,28 +162,28 @@ public class MonthTableModel implements TableModel {
 	/**
 	 * @return the listeners
 	 */
-	public List<TableModelListener> getListeners() {
+	private List<TableModelListener> getListeners() {
 		return _listeners;
 	}
 
 	/**
 	 * @param listeners the listeners to set
 	 */
-	public void setListeners(List<TableModelListener> listeners) {
+	private void setListeners(List<TableModelListener> listeners) {
 		_listeners = listeners;
 	}
 
 	/**
 	 * @return the ref
 	 */
-	public Calendar getRef() {
+	private Calendar getRef() {
 		return _ref;
 	}
 
 	/**
 	 * @param ref the ref to set
 	 */
-	public void setRef(Calendar ref) {
+	private void setRef(Calendar ref) {
 		_ref = ref;
 	}
 }
