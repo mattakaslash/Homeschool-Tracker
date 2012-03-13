@@ -5,6 +5,7 @@ import ht.model.Student;
 import ht.view.render.StudentCellRenderer;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -113,6 +114,8 @@ public class MainFrame extends JFrame {
 	private JTable jTableNovember;
 	private JTable jTableOctober;
 	private JTable jTableSeptember;
+
+	private JPanel jPanelYearPicker;
 
 	/**
 	 * Defines a new frame.
@@ -330,6 +333,7 @@ public class MainFrame extends JFrame {
 		if (jLabelYear == null) {
 			jLabelYear = new JLabel();
 			jLabelYear.setFont(new Font("Dialog", Font.BOLD, 16));
+			jLabelYear.setHorizontalAlignment(SwingConstants.CENTER);
 			jLabelYear.setText("0000");
 		}
 		return jLabelYear;
@@ -410,9 +414,6 @@ public class MainFrame extends JFrame {
 		if (jPanelYear == null) {
 			jPanelYear = new JPanel();
 			jPanelYear.setLayout(new GroupLayout());
-			jPanelYear.add(getJLabelYear(), new Constraints(new Leading(374, 10, 10), new Leading(12, 12, 12)));
-			jPanelYear.add(getJButtonNextYear(), new Constraints(new Leading(430, 12, 12), new Leading(11, 12, 12)));
-			jPanelYear.add(getJButtonPrevYear(), new Constraints(new Leading(318, 12, 12), new Leading(11, 12, 12)));
 			jPanelYear.add(getJLabelJune(), new Constraints(new Leading(12, 202, 12, 12), new Leading(42, 12, 12)));
 			jPanelYear.add(getJLabelJuly(), new Constraints(new Leading(12, 202, 12, 12), new Leading(185, 12, 12)));
 			jPanelYear.add(getJLabelAugust(), new Constraints(new Leading(12, 202, 12, 12), new Leading(327, 12, 12)));
@@ -437,9 +438,9 @@ public class MainFrame extends JFrame {
 			jPanelYear.add(getJScrollPaneMarch(), new Constraints(new Leading(427, 200, 10, 10), new Leading(206, 115, 12, 12)));
 			jPanelYear.add(getJScrollPaneApril(), new Constraints(new Leading(427, 200, 10, 10), new Leading(348, 115, 12, 12)));
 			jPanelYear.add(getJScrollPaneMay(), new Constraints(new Leading(427, 200, 10, 10), new Leading(490, 115, 12, 12)));
+			jPanelYear.add(getJPanelYearPicker(), new Constraints(new Leading(12, 616, 12, 12), new Leading(0, 44, 12, 12)));
 			jPanelYear.addComponentListener(new ComponentAdapter() {
 	
-				@Override
 				public void componentShown(ComponentEvent event) {
 					jPanelYearComponentComponentShown(event);
 				}
@@ -709,10 +710,23 @@ public class MainFrame extends JFrame {
 
 	private void initComponents() {
 		setTitle("Homeschool Tracker");
+		setFont(new Font("Dialog", Font.PLAIN, 12));
+		setForeground(Color.black);
 		add(getJLabelStatus(), BorderLayout.SOUTH);
 		add(getJTabbedPaneTabs(), BorderLayout.CENTER);
 		setJMenuBar(getJMenuBarMain());
-		pack();
+		setSize(1099, 668);
+	}
+
+	private JPanel getJPanelYearPicker() {
+		if (jPanelYearPicker == null) {
+			jPanelYearPicker = new JPanel();
+			jPanelYearPicker.setLayout(new GroupLayout());
+			jPanelYearPicker.add(getJButtonPrevYear(), new Constraints(new Leading(12, 48, 48), new Leading(11, 12, 12)));
+			jPanelYearPicker.add(getJButtonNextYear(), new Constraints(new Trailing(12, 48, 48), new Leading(11, 12, 12)));
+			jPanelYearPicker.add(getJLabelYear(), new Constraints(new Bilateral(65, 65, 36), new Leading(12, 12, 12)));
+		}
+		return jPanelYearPicker;
 	}
 
 	/**
