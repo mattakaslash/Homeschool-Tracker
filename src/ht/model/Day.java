@@ -26,6 +26,15 @@ public class Day {
 	
 	@Column(name = "HAD_SCHOOL")
 	private Boolean _hadSchool;
+	
+	@Column(name = "VACATION")
+	private Boolean _vacationDay;
+	
+	@Column(name = "SICK")
+	private Boolean _sickDay;
+	
+	@Column(name = "COOP")
+	private Boolean _coopDay;
 
 	/**
 	 * Creates a new Day set to today, with attendance as FALSE.
@@ -33,6 +42,9 @@ public class Day {
 	public Day() {
 		setDate(new Date());
 		setHadSchool(Boolean.FALSE);
+		setVacationDay(Boolean.FALSE);
+		setSickDay(Boolean.FALSE);
+		setCoopDay(Boolean.FALSE);
 	}
 
 	/**
@@ -63,5 +75,47 @@ public class Day {
 	 */
 	private void setHadSchool(Boolean hadSchool) {
 		_hadSchool = hadSchool;
+	}
+
+	/**
+	 * @return the vacationDay
+	 */
+	private Boolean isVacationDay() {
+		return _vacationDay;
+	}
+
+	/**
+	 * @param vacationDay the vacationDay to set
+	 */
+	private void setVacationDay(Boolean vacationDay) {
+		_vacationDay = vacationDay;
+	}
+
+	/**
+	 * @return the sickDay
+	 */
+	private Boolean isSickDay() {
+		return _sickDay;
+	}
+
+	/**
+	 * @param sickDay the sickDay to set
+	 */
+	private void setSickDay(Boolean sickDay) {
+		_sickDay = sickDay;
+	}
+
+	/**
+	 * @return the coopDay
+	 */
+	private Boolean isCoopDay() {
+		return _coopDay;
+	}
+
+	/**
+	 * @param coopDay the coopDay to set
+	 */
+	private void setCoopDay(Boolean coopDay) {
+		_coopDay = coopDay;
 	}
 }
