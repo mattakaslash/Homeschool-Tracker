@@ -36,9 +36,13 @@ public class Day {
 	 */
 	public static Day get(Date date) {
 		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
-		Query q = em.createQuery("SELECT d FROM Day d WHERE date = ?");
-		q.setParameter(1, date, TemporalType.DATE);
-		return (Day) q.getSingleResult();
+		Query q = em.createQuery("SELECT d FROM Day d WHERE d._date = :date");
+		q.setParameter("date", date, TemporalType.DATE);
+		if (q.getResultList().size() == 0) {
+			return new Day(date);
+		} else {
+			return (Day) q.getSingleResult();
+		}
 	}
 
 	@Column(name = "COOP")
@@ -59,10 +63,22 @@ public class Day {
 	private Boolean _vacationDay;
 
 	/**
-	 * Creates a new Day set to today, with attendance as FALSE.
+	 * Creates a new Day set to today.
 	 */
 	public Day() {
 		setDate(new Date());
+		setHadSchool(Boolean.FALSE);
+		setVacationDay(Boolean.FALSE);
+		setSickDay(Boolean.FALSE);
+		setCoopDay(Boolean.FALSE);
+	}
+
+	/**
+	 * Creates a new Day set to the given date
+	 * @param date
+	 */
+	public Day(Date date) {
+		setDate(date);
 		setHadSchool(Boolean.FALSE);
 		setVacationDay(Boolean.FALSE);
 		setSickDay(Boolean.FALSE);

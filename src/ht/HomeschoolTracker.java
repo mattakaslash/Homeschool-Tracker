@@ -61,7 +61,7 @@ public class HomeschoolTracker {
 			JOptionPane
 					.showMessageDialog(null, "Caught an exception trying to initialize the database: " + e.getLocalizedMessage());
 			e.printStackTrace();
-			return;
+			System.exit(1);
 		}
 		MainFrame frame = new MainFrame();
 		frame.setDefaultCloseOperation(MainFrame.EXIT_ON_CLOSE);

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,6 +34,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import org.dyno.visual.swing.layouts.Bilateral;
@@ -93,6 +95,7 @@ public class MainFrame extends JFrame {
 	private JMenuBar jMenuBarMain;
 	private JMenu jMenuFile;
 	private JMenuItem jMenuItemFileExit;
+	private JPanel jPanelDayDetails;
 	private JPanel jPanelStudents;
 	private JPanel jPanelYear;
 	private JPanel jPanelYearPicker;
@@ -120,6 +123,7 @@ public class MainFrame extends JFrame {
 	private JTable jTableMarch;
 	private JTable jTableMay;
 	private JTable jTableNovember;
+
 	private JTable jTableOctober;
 
 	private JTable jTableSeptember;
@@ -412,6 +416,16 @@ public class MainFrame extends JFrame {
 		return jMenuItemFileExit;
 	}
 
+	private JPanel getJPanelDayDetails() {
+		if (jPanelDayDetails == null) {
+			jPanelDayDetails = new JPanel();
+			jPanelDayDetails.setBorder(BorderFactory.createTitledBorder(null, "Details for ", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font(
+					"Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			jPanelDayDetails.setLayout(new GroupLayout());
+		}
+		return jPanelDayDetails;
+	}
+
 	private JPanel getJPanelStudents() {
 		if (jPanelStudents == null) {
 			jPanelStudents = new JPanel();
@@ -462,9 +476,9 @@ public class MainFrame extends JFrame {
 			jPanelYear.add(getJScrollPaneApril(), new Constraints(new Leading(427, 200, 10, 10), new Leading(348, 115, 12, 12)));
 			jPanelYear.add(getJScrollPaneMay(), new Constraints(new Leading(427, 200, 10, 10), new Leading(490, 115, 12, 12)));
 			jPanelYear.add(getJPanelYearPicker(), new Constraints(new Leading(12, 616, 12, 12), new Leading(0, 44, 12, 12)));
+			jPanelYear.add(getJPanelDayDetails(), new Constraints(new Bilateral(633, 12, 0), new Bilateral(12, 12, 0)));
 			jPanelYear.addComponentListener(new ComponentAdapter() {
-
-				@Override
+	
 				public void componentShown(ComponentEvent event) {
 					jPanelYearComponentComponentShown(event);
 				}
@@ -600,10 +614,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableApril() {
 		if (jTableApril == null) {
 			jTableApril = new JTable();
-			jTableApril.setModel(new MonthTableModel(4, getSelectedYear()));
+			jTableApril.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableApril.setRowSelectionAllowed(false);
 			jTableApril.setShowHorizontalLines(false);
 			jTableApril.setShowVerticalLines(false);
+			jTableApril.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableAprilMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableApril;
 	}
@@ -611,10 +638,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableAugust() {
 		if (jTableAugust == null) {
 			jTableAugust = new JTable();
-			jTableAugust.setModel(new MonthTableModel(8, getSelectedYear()));
+			jTableAugust.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableAugust.setRowSelectionAllowed(false);
 			jTableAugust.setShowHorizontalLines(false);
 			jTableAugust.setShowVerticalLines(false);
+			jTableAugust.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableAugustMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableAugust;
 	}
@@ -622,10 +662,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableDecember() {
 		if (jTableDecember == null) {
 			jTableDecember = new JTable();
-			jTableDecember.setModel(new MonthTableModel(12, getSelectedYear()));
+			jTableDecember.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableDecember.setRowSelectionAllowed(false);
 			jTableDecember.setShowHorizontalLines(false);
 			jTableDecember.setShowVerticalLines(false);
+			jTableDecember.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableDecemberMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableDecember;
 	}
@@ -633,10 +686,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableFebruary() {
 		if (jTableFebruary == null) {
 			jTableFebruary = new JTable();
-			jTableFebruary.setModel(new MonthTableModel(2, getSelectedYear() + 1));
+			jTableFebruary.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableFebruary.setRowSelectionAllowed(false);
 			jTableFebruary.setShowHorizontalLines(false);
 			jTableFebruary.setShowVerticalLines(false);
+			jTableFebruary.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableFebruaryMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableFebruary;
 	}
@@ -644,10 +710,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableJanuary() {
 		if (jTableJanuary == null) {
 			jTableJanuary = new JTable();
-			jTableJanuary.setModel(new MonthTableModel(1, getSelectedYear() + 1));
+			jTableJanuary.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableJanuary.setRowSelectionAllowed(false);
 			jTableJanuary.setShowHorizontalLines(false);
 			jTableJanuary.setShowVerticalLines(false);
+			jTableJanuary.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableJanuaryMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableJanuary;
 	}
@@ -655,10 +734,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableJuly() {
 		if (jTableJuly == null) {
 			jTableJuly = new JTable();
-			jTableJuly.setModel(new MonthTableModel(7, getSelectedYear()));
+			jTableJuly.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableJuly.setRowSelectionAllowed(false);
 			jTableJuly.setShowHorizontalLines(false);
 			jTableJuly.setShowVerticalLines(false);
+			jTableJuly.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableJulyMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableJuly;
 	}
@@ -666,9 +758,7 @@ public class MainFrame extends JFrame {
 	private JTable getJTableJune() {
 		if (jTableJune == null) {
 			jTableJune = new JTable();
-			jTableJune.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null, null, 1, 2, },
-					{ 3, 4, 5, 6, 7, 8, 9, }, { 10, 11, 12, 13, 14, 15, 16, }, { 17, 18, 19, 20, 21, 22, 23, },
-					{ 24, 25, 26, 27, 28, 29, 30, }, }, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+			jTableJune.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
 				private static final long serialVersionUID = 1L;
 				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
 						Integer.class, Integer.class, };
@@ -695,10 +785,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableMarch() {
 		if (jTableMarch == null) {
 			jTableMarch = new JTable();
-			jTableMarch.setModel(new MonthTableModel(3, getSelectedYear()));
+			jTableMarch.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableMarch.setRowSelectionAllowed(false);
 			jTableMarch.setShowHorizontalLines(false);
 			jTableMarch.setShowVerticalLines(false);
+			jTableMarch.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableMarchMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableMarch;
 	}
@@ -706,10 +809,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableMay() {
 		if (jTableMay == null) {
 			jTableMay = new JTable();
-			jTableMay.setModel(new MonthTableModel(5, getSelectedYear()));
+			jTableMay.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableMay.setRowSelectionAllowed(false);
 			jTableMay.setShowHorizontalLines(false);
 			jTableMay.setShowVerticalLines(false);
+			jTableMay.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableMayMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableMay;
 	}
@@ -717,10 +833,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableNovember() {
 		if (jTableNovember == null) {
 			jTableNovember = new JTable();
-			jTableNovember.setModel(new MonthTableModel(11, getSelectedYear()));
+			jTableNovember.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableNovember.setRowSelectionAllowed(false);
 			jTableNovember.setShowHorizontalLines(false);
 			jTableNovember.setShowVerticalLines(false);
+			jTableNovember.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableNovemberMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableNovember;
 	}
@@ -728,10 +857,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableOctober() {
 		if (jTableOctober == null) {
 			jTableOctober = new JTable();
-			jTableOctober.setModel(new MonthTableModel(10, getSelectedYear()));
+			jTableOctober.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableOctober.setRowSelectionAllowed(false);
 			jTableOctober.setShowHorizontalLines(false);
 			jTableOctober.setShowVerticalLines(false);
+			jTableOctober.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableOctoberMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableOctober;
 	}
@@ -739,10 +881,23 @@ public class MainFrame extends JFrame {
 	private JTable getJTableSeptember() {
 		if (jTableSeptember == null) {
 			jTableSeptember = new JTable();
-			jTableSeptember.setModel(new MonthTableModel(9, getSelectedYear()));
+			jTableSeptember.setModel(new DefaultTableModel(null, new String[] { "S", "M", "T", "W", "T", "F", "S", }) {
+				private static final long serialVersionUID = 1L;
+				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, };
+	
+				public Class<?> getColumnClass(int columnIndex) {
+					return types[columnIndex];
+				}
+			});
 			jTableSeptember.setRowSelectionAllowed(false);
 			jTableSeptember.setShowHorizontalLines(false);
 			jTableSeptember.setShowVerticalLines(false);
+			jTableSeptember.addMouseListener(new MouseAdapter() {
+	
+				public void mouseClicked(MouseEvent event) {
+					jTableSeptemberMouseMouseClicked(event);
+				}
+			});
 		}
 		return jTableSeptember;
 	}
@@ -775,7 +930,7 @@ public class MainFrame extends JFrame {
 		add(getJLabelStatus(), BorderLayout.SOUTH);
 		add(getJTabbedPaneTabs(), BorderLayout.CENTER);
 		setJMenuBar(getJMenuBarMain());
-		setSize(1099, 668);
+		setSize(1024, 668);
 	}
 
 	/**
@@ -914,19 +1069,50 @@ public class MainFrame extends JFrame {
 		// TODO: highlight days
 	}
 
+	private void jTableAprilMouseMouseClicked(MouseEvent event) {
+	}
+
+	private void jTableAugustMouseMouseClicked(MouseEvent event) {
+	}
+
+	private void jTableDecemberMouseMouseClicked(MouseEvent event) {
+	}
+
+	private void jTableFebruaryMouseMouseClicked(MouseEvent event) {
+	}
+
+	private void jTableJanuaryMouseMouseClicked(MouseEvent event) {
+	}
+
+	private void jTableJulyMouseMouseClicked(MouseEvent event) {
+	}
+
 	/**
 	 * Event: June table, mouse clicked.
 	 * 
 	 * @param event
 	 */
 	private void jTableJuneMouseMouseClicked(MouseEvent event) {
-		JTable month = (JTable) event.getComponent();
-		int row = month.getSelectedRow();
-		int col = month.getSelectedColumn();
+		int row = getJTableJune().getSelectedRow();
+		int col = getJTableJune().getSelectedColumn();
 		clearAllTableSelections();
-		month.changeSelection(row, col, false, false);
-		loadDay((Integer) month.getValueAt(row, col), ((MonthTableModel) month.getModel()).getMonth(),
-				((MonthTableModel) month.getModel()).getYear());
+		getJTableJune().changeSelection(row, col, false, false);
+		loadDay((Integer) getJTableJune().getValueAt(row, col), 6, getSelectedYear());
+	}
+
+	private void jTableMarchMouseMouseClicked(MouseEvent event) {
+	}
+
+	private void jTableMayMouseMouseClicked(MouseEvent event) {
+	}
+
+	private void jTableNovemberMouseMouseClicked(MouseEvent event) {
+	}
+
+	private void jTableOctoberMouseMouseClicked(MouseEvent event) {
+	}
+
+	private void jTableSeptemberMouseMouseClicked(MouseEvent event) {
 	}
 
 	private void loadDay(Integer date, Integer month, Integer year) {
