@@ -3,6 +3,8 @@ package ht.view;
 import ht.model.Day;
 import ht.model.MonthTableModel;
 import ht.model.Student;
+import ht.util.MonthTableSelectionListener;
+import ht.view.render.MonthTableRenderer;
 import ht.view.render.StudentCellRenderer;
 
 import java.awt.BorderLayout;
@@ -58,14 +60,23 @@ import org.dyno.visual.swing.layouts.Trailing;
 // VS4E -- DO NOT REMOVE THIS LINE!
 public class MainFrame extends JFrame {
 	/**
-	 * Generated.
-	 */
-	private static final long serialVersionUID = 8444716793871398441L;
-	
-	/**
 	 * Standard date format.
 	 */
 	private static final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+
+	/**
+	 * Renderer for month tables.
+	 */
+	private static final MonthTableRenderer monthTableRenderer = new MonthTableRenderer();
+
+	/**
+	 * Generated.
+	 */
+	private static final long serialVersionUID = 8444716793871398441L;
+
+	private static MonthTableRenderer getMonthTableRenderer() {
+		return monthTableRenderer;
+	}
 
 	/**
 	 * Stores the currently-selected school day.
@@ -81,7 +92,6 @@ public class MainFrame extends JFrame {
 	 * Stores the currently selected year from the year tab.
 	 */
 	private Integer _selectedYear = Calendar.getInstance().get(Calendar.YEAR);
-
 	private ButtonGroup buttonGroupAttendance;
 	private JButton jButtonNextYear;
 	private JButton jButtonPrevYear;
@@ -141,6 +151,7 @@ public class MainFrame extends JFrame {
 	private JTable jTableMay;
 	private JTable jTableNovember;
 	private JTable jTableOctober;
+
 	private JTable jTableSeptember;
 
 	/**
@@ -148,21 +159,243 @@ public class MainFrame extends JFrame {
 	 */
 	public MainFrame() {
 		initComponents();
+
+		// set table renderers
+		getJTableJune().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableJuly().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableAugust().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableSeptember().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableOctober().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableNovember().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableDecember().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableJanuary().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableFebruary().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableMarch().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableApril().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableMay().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+
+		// set row selection listeners
+		getJTableJune().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableJune()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 6, getSelectedYear());
+			}
+		});
+		getJTableJuly().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableJuly()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 7, getSelectedYear());
+			}
+		});
+		getJTableAugust().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableAugust()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 8, getSelectedYear());
+			}
+		});
+		getJTableSeptember().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableSeptember()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 9, getSelectedYear());
+			}
+		});
+		getJTableOctober().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableOctober()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 10, getSelectedYear());
+			}
+		});
+		getJTableNovember().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableNovember()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 11, getSelectedYear());
+			}
+		});
+		getJTableDecember().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableDecember()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 12, getSelectedYear());
+			}
+		});
+		getJTableJanuary().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableJanuary()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 1, getSelectedYear() + 1);
+			}
+		});
+		getJTableFebruary().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableFebruary()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 2, getSelectedYear() + 1);
+			}
+		});
+		getJTableMarch().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableMarch()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 3, getSelectedYear() + 1);
+			}
+		});
+		getJTableApril().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableApril()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 4, getSelectedYear() + 1);
+			}
+		});
+		getJTableMay().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableMay()) {
+
+			@Override
+			public void dateChanged(Integer date) {
+				loadDay(date, 5, getSelectedYear() + 1);
+			}
+		});
+
+		// set column selection listeners
+		getJTableJune().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableJune()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 6, getSelectedYear());
+					}
+				});
+		getJTableJuly().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableJuly()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 7, getSelectedYear());
+					}
+				});
+		getJTableAugust().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableAugust()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 8, getSelectedYear());
+					}
+				});
+		getJTableSeptember().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableSeptember()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 9, getSelectedYear());
+					}
+				});
+		getJTableOctober().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableOctober()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 10, getSelectedYear());
+					}
+				});
+		getJTableNovember().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableNovember()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 11, getSelectedYear());
+					}
+				});
+		getJTableDecember().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableDecember()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 12, getSelectedYear());
+					}
+				});
+		getJTableJanuary().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableJanuary()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 1, getSelectedYear() + 1);
+					}
+				});
+		getJTableFebruary().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableFebruary()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 2, getSelectedYear() + 1);
+					}
+				});
+		getJTableMarch().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableMarch()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 3, getSelectedYear() + 1);
+					}
+				});
+		getJTableApril().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableApril()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 4, getSelectedYear() + 1);
+					}
+				});
+		getJTableMay().getColumnModel().getSelectionModel()
+				.addListSelectionListener(new MonthTableSelectionListener(getJTableMay()) {
+
+					@Override
+					public void dateChanged(Integer date) {
+						loadDay(date, 5, getSelectedYear() + 1);
+					}
+				});
 	}
 
-	private void clearAllTableSelections() {
-		getJTableJanuary().getSelectionModel().clearSelection();
-		getJTableFebruary().getSelectionModel().clearSelection();
-		getJTableMarch().getSelectionModel().clearSelection();
-		getJTableApril().getSelectionModel().clearSelection();
-		getJTableMay().getSelectionModel().clearSelection();
-		getJTableJune().getSelectionModel().clearSelection();
-		getJTableJuly().getSelectionModel().clearSelection();
-		getJTableAugust().getSelectionModel().clearSelection();
-		getJTableSeptember().getSelectionModel().clearSelection();
-		getJTableOctober().getSelectionModel().clearSelection();
-		getJTableNovember().getSelectionModel().clearSelection();
-		getJTableDecember().getSelectionModel().clearSelection();
+	private void clearAllTableSelections(Integer month) {
+		if (month != 1) {
+			getJTableJanuary().getSelectionModel().clearSelection();
+		}
+		if (month != 2) {
+			getJTableFebruary().getSelectionModel().clearSelection();
+		}
+		if (month != 3) {
+			getJTableMarch().getSelectionModel().clearSelection();
+		}
+		if (month != 4) {
+			getJTableApril().getSelectionModel().clearSelection();
+		}
+		if (month != 5) {
+			getJTableMay().getSelectionModel().clearSelection();
+		}
+		if (month != 6) {
+			getJTableJune().getSelectionModel().clearSelection();
+		}
+		if (month != 7) {
+			getJTableJuly().getSelectionModel().clearSelection();
+		}
+		if (month != 8) {
+			getJTableAugust().getSelectionModel().clearSelection();
+		}
+		if (month != 9) {
+			getJTableSeptember().getSelectionModel().clearSelection();
+		}
+		if (month != 10) {
+			getJTableOctober().getSelectionModel().clearSelection();
+		}
+		if (month != 11) {
+			getJTableNovember().getSelectionModel().clearSelection();
+		}
+		if (month != 12) {
+			getJTableDecember().getSelectionModel().clearSelection();
+		}
 	}
 
 	private JButton getJButtonNextYear() {
@@ -261,6 +494,7 @@ public class MainFrame extends JFrame {
 			jCheckBoxCoOp.setText("Co-Op");
 			jCheckBoxCoOp.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent event) {
 					jCheckBoxCoOpItemItemStateChanged(event);
 				}
@@ -520,6 +754,7 @@ public class MainFrame extends JFrame {
 			jPanelYear.add(getJPanelDayDetails(), new Constraints(new Bilateral(633, 12, 0), new Bilateral(12, 12, 0)));
 			jPanelYear.addComponentListener(new ComponentAdapter() {
 
+				@Override
 				public void componentShown(ComponentEvent event) {
 					jPanelYearComponentComponentShown(event);
 				}
@@ -546,6 +781,7 @@ public class MainFrame extends JFrame {
 			jRadioButtonHadSchool.setText("Had School");
 			jRadioButtonHadSchool.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent event) {
 					jRadioButtonHadSchoolItemItemStateChanged(event);
 				}
@@ -560,6 +796,7 @@ public class MainFrame extends JFrame {
 			jRadioButtonSick.setText("Sick");
 			jRadioButtonSick.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent event) {
 					jRadioButtonSickItemItemStateChanged(event);
 				}
@@ -574,6 +811,7 @@ public class MainFrame extends JFrame {
 			jRadioButtonVacation.setText("Vacation");
 			jRadioButtonVacation.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent event) {
 					jRadioButtonVacationItemItemStateChanged(event);
 				}
@@ -703,6 +941,7 @@ public class MainFrame extends JFrame {
 				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
 						Integer.class, Integer.class, };
 
+				@Override
 				public Class<?> getColumnClass(int columnIndex) {
 					return types[columnIndex];
 				}
@@ -710,12 +949,6 @@ public class MainFrame extends JFrame {
 			jTableApril.setRowSelectionAllowed(false);
 			jTableApril.setShowHorizontalLines(false);
 			jTableApril.setShowVerticalLines(false);
-			jTableApril.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableAprilMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableApril;
 	}
@@ -729,6 +962,7 @@ public class MainFrame extends JFrame {
 						Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class,
 								Integer.class, Integer.class, Integer.class, };
 
+						@Override
 						public Class<?> getColumnClass(int columnIndex) {
 							return types[columnIndex];
 						}
@@ -736,12 +970,6 @@ public class MainFrame extends JFrame {
 			jTableAugust.setRowSelectionAllowed(false);
 			jTableAugust.setShowHorizontalLines(false);
 			jTableAugust.setShowVerticalLines(false);
-			jTableAugust.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableAugustMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableAugust;
 	}
@@ -755,6 +983,7 @@ public class MainFrame extends JFrame {
 				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
 						Integer.class, Integer.class, };
 
+				@Override
 				public Class<?> getColumnClass(int columnIndex) {
 					return types[columnIndex];
 				}
@@ -762,12 +991,6 @@ public class MainFrame extends JFrame {
 			jTableDecember.setRowSelectionAllowed(false);
 			jTableDecember.setShowHorizontalLines(false);
 			jTableDecember.setShowVerticalLines(false);
-			jTableDecember.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableDecemberMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableDecember;
 	}
@@ -781,6 +1004,7 @@ public class MainFrame extends JFrame {
 				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
 						Integer.class, Integer.class, };
 
+				@Override
 				public Class<?> getColumnClass(int columnIndex) {
 					return types[columnIndex];
 				}
@@ -788,12 +1012,6 @@ public class MainFrame extends JFrame {
 			jTableFebruary.setRowSelectionAllowed(false);
 			jTableFebruary.setShowHorizontalLines(false);
 			jTableFebruary.setShowVerticalLines(false);
-			jTableFebruary.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableFebruaryMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableFebruary;
 	}
@@ -807,6 +1025,7 @@ public class MainFrame extends JFrame {
 						Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class,
 								Integer.class, Integer.class, Integer.class, };
 
+						@Override
 						public Class<?> getColumnClass(int columnIndex) {
 							return types[columnIndex];
 						}
@@ -814,12 +1033,6 @@ public class MainFrame extends JFrame {
 			jTableJanuary.setRowSelectionAllowed(false);
 			jTableJanuary.setShowHorizontalLines(false);
 			jTableJanuary.setShowVerticalLines(false);
-			jTableJanuary.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableJanuaryMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableJanuary;
 	}
@@ -832,6 +1045,7 @@ public class MainFrame extends JFrame {
 				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
 						Integer.class, Integer.class, };
 
+				@Override
 				public Class<?> getColumnClass(int columnIndex) {
 					return types[columnIndex];
 				}
@@ -839,12 +1053,6 @@ public class MainFrame extends JFrame {
 			jTableJuly.setRowSelectionAllowed(false);
 			jTableJuly.setShowHorizontalLines(false);
 			jTableJuly.setShowVerticalLines(false);
-			jTableJuly.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableJulyMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableJuly;
 	}
@@ -865,13 +1073,6 @@ public class MainFrame extends JFrame {
 			jTableJune.setRowSelectionAllowed(false);
 			jTableJune.setShowHorizontalLines(false);
 			jTableJune.setShowVerticalLines(false);
-			jTableJune.addMouseListener(new MouseAdapter() {
-
-				@Override
-				public void mouseClicked(MouseEvent event) {
-					jTableJuneMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableJune;
 	}
@@ -884,6 +1085,7 @@ public class MainFrame extends JFrame {
 				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
 						Integer.class, Integer.class, };
 
+				@Override
 				public Class<?> getColumnClass(int columnIndex) {
 					return types[columnIndex];
 				}
@@ -891,12 +1093,6 @@ public class MainFrame extends JFrame {
 			jTableMarch.setRowSelectionAllowed(false);
 			jTableMarch.setShowHorizontalLines(false);
 			jTableMarch.setShowVerticalLines(false);
-			jTableMarch.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableMarchMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableMarch;
 	}
@@ -909,6 +1105,7 @@ public class MainFrame extends JFrame {
 				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
 						Integer.class, Integer.class, };
 
+				@Override
 				public Class<?> getColumnClass(int columnIndex) {
 					return types[columnIndex];
 				}
@@ -916,12 +1113,6 @@ public class MainFrame extends JFrame {
 			jTableMay.setRowSelectionAllowed(false);
 			jTableMay.setShowHorizontalLines(false);
 			jTableMay.setShowVerticalLines(false);
-			jTableMay.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableMayMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableMay;
 	}
@@ -935,6 +1126,7 @@ public class MainFrame extends JFrame {
 				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
 						Integer.class, Integer.class, };
 
+				@Override
 				public Class<?> getColumnClass(int columnIndex) {
 					return types[columnIndex];
 				}
@@ -942,12 +1134,6 @@ public class MainFrame extends JFrame {
 			jTableNovember.setRowSelectionAllowed(false);
 			jTableNovember.setShowHorizontalLines(false);
 			jTableNovember.setShowVerticalLines(false);
-			jTableNovember.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableNovemberMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableNovember;
 	}
@@ -961,6 +1147,7 @@ public class MainFrame extends JFrame {
 						Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class,
 								Integer.class, Integer.class, Integer.class, };
 
+						@Override
 						public Class<?> getColumnClass(int columnIndex) {
 							return types[columnIndex];
 						}
@@ -968,12 +1155,6 @@ public class MainFrame extends JFrame {
 			jTableOctober.setRowSelectionAllowed(false);
 			jTableOctober.setShowHorizontalLines(false);
 			jTableOctober.setShowVerticalLines(false);
-			jTableOctober.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableOctoberMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableOctober;
 	}
@@ -987,6 +1168,7 @@ public class MainFrame extends JFrame {
 				Class<?>[] types = new Class<?>[] { Integer.class, Integer.class, Integer.class, Integer.class, Integer.class,
 						Integer.class, Integer.class, };
 
+				@Override
 				public Class<?> getColumnClass(int columnIndex) {
 					return types[columnIndex];
 				}
@@ -994,12 +1176,6 @@ public class MainFrame extends JFrame {
 			jTableSeptember.setRowSelectionAllowed(false);
 			jTableSeptember.setShowHorizontalLines(false);
 			jTableSeptember.setShowVerticalLines(false);
-			jTableSeptember.addMouseListener(new MouseAdapter() {
-
-				public void mouseClicked(MouseEvent event) {
-					jTableSeptemberMouseMouseClicked(event);
-				}
-			});
 		}
 		return jTableSeptember;
 	}
@@ -1030,6 +1206,7 @@ public class MainFrame extends JFrame {
 		buttonGroupAttendance.add(getJRadioButtonHadSchool());
 		buttonGroupAttendance.add(getJRadioButtonSick());
 		buttonGroupAttendance.add(getJRadioButtonVacation());
+		buttonGroupAttendance.clearSelection();
 	}
 
 	private void initComponents() {
@@ -1050,7 +1227,7 @@ public class MainFrame extends JFrame {
 	 */
 	private void jButtonNextYearActionActionPerformed(ActionEvent event) {
 		setSelectedYear(getSelectedYear() + 1);
-		getJLabelYear().setText(getSelectedYear().toString());
+		getJLabelYear().setText(getSelectedYear().toString() + " - " + (getSelectedYear() + 1));
 		refreshCalenders();
 	}
 
@@ -1061,7 +1238,7 @@ public class MainFrame extends JFrame {
 	 */
 	private void jButtonPrevYearActionActionPerformed(ActionEvent event) {
 		setSelectedYear(getSelectedYear() - 1);
-		getJLabelYear().setText(getSelectedYear().toString());
+		getJLabelYear().setText(getSelectedYear().toString() + " - " + (getSelectedYear() + 1));
 		refreshCalenders();
 	}
 
@@ -1180,13 +1357,13 @@ public class MainFrame extends JFrame {
 	 */
 	private void jPanelYearComponentComponentShown(ComponentEvent event) {
 		if (getJLabelYear().getText().contentEquals("0000")) {
-			getJLabelYear().setText(getSelectedYear().toString());
+			getJLabelYear().setText(getSelectedYear().toString() + " - " + (getSelectedYear() + 1));
 		}
-		// TODO: highlight days
 	}
 
 	/**
 	 * Event: Attendance changed.
+	 * 
 	 * @param event
 	 */
 	private void jRadioButtonHadSchoolItemItemStateChanged(ItemEvent event) {
@@ -1197,6 +1374,7 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: Attendance changed.
+	 * 
 	 * @param event
 	 */
 	private void jRadioButtonSickItemItemStateChanged(ItemEvent event) {
@@ -1207,6 +1385,7 @@ public class MainFrame extends JFrame {
 
 	/**
 	 * Event: Attendance changed.
+	 * 
 	 * @param event
 	 */
 	private void jRadioButtonVacationItemItemStateChanged(ItemEvent event) {
@@ -1216,171 +1395,22 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
-	 * Event: April table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableAprilMouseMouseClicked(MouseEvent event) {
-		int row = getJTableApril().getSelectedRow();
-		int col = getJTableApril().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableApril().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableApril().getValueAt(row, col), 4, getSelectedYear());
-	}
-
-	/**
-	 * Event: August table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableAugustMouseMouseClicked(MouseEvent event) {
-		int row = getJTableAugust().getSelectedRow();
-		int col = getJTableAugust().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableAugust().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableAugust().getValueAt(row, col), 8, getSelectedYear());
-	}
-
-	/**
-	 * Event: December table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableDecemberMouseMouseClicked(MouseEvent event) {
-		int row = getJTableDecember().getSelectedRow();
-		int col = getJTableDecember().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableDecember().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableDecember().getValueAt(row, col), 12, getSelectedYear());
-	}
-
-	/**
-	 * Event: February table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableFebruaryMouseMouseClicked(MouseEvent event) {
-		int row = getJTableFebruary().getSelectedRow();
-		int col = getJTableFebruary().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableFebruary().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableFebruary().getValueAt(row, col), 2, getSelectedYear());
-	}
-
-	/**
-	 * Event: January table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableJanuaryMouseMouseClicked(MouseEvent event) {
-		int row = getJTableJanuary().getSelectedRow();
-		int col = getJTableJanuary().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableJanuary().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableJanuary().getValueAt(row, col), 6, getSelectedYear());
-	}
-
-	/**
-	 * Event: July table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableJulyMouseMouseClicked(MouseEvent event) {
-		int row = getJTableJuly().getSelectedRow();
-		int col = getJTableJuly().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableJuly().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableJuly().getValueAt(row, col), 6, getSelectedYear());
-	}
-
-	/**
-	 * Event: June table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableJuneMouseMouseClicked(MouseEvent event) {
-		int row = getJTableJune().getSelectedRow();
-		int col = getJTableJune().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableJune().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableJune().getValueAt(row, col), 6, getSelectedYear());
-	}
-
-	/**
-	 * Event: March table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableMarchMouseMouseClicked(MouseEvent event) {
-		int row = getJTableMarch().getSelectedRow();
-		int col = getJTableMarch().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableMarch().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableMarch().getValueAt(row, col), 3, getSelectedYear());
-	}
-
-	/**
-	 * Event: May table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableMayMouseMouseClicked(MouseEvent event) {
-		int row = getJTableMay().getSelectedRow();
-		int col = getJTableMay().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableMay().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableMay().getValueAt(row, col), 5, getSelectedYear());
-	}
-
-	/**
-	 * Event: November table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableNovemberMouseMouseClicked(MouseEvent event) {
-		int row = getJTableNovember().getSelectedRow();
-		int col = getJTableNovember().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableNovember().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableNovember().getValueAt(row, col), 11, getSelectedYear());
-	}
-
-	/**
-	 * Event: October table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableOctoberMouseMouseClicked(MouseEvent event) {
-		int row = getJTableOctober().getSelectedRow();
-		int col = getJTableOctober().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableOctober().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableOctober().getValueAt(row, col), 10, getSelectedYear());
-	}
-
-	/**
-	 * Event: September table, mouse clicked.
-	 * 
-	 * @param event
-	 */
-	private void jTableSeptemberMouseMouseClicked(MouseEvent event) {
-		int row = getJTableSeptember().getSelectedRow();
-		int col = getJTableSeptember().getSelectedColumn();
-		clearAllTableSelections();
-		getJTableSeptember().changeSelection(row, col, false, false);
-		loadDay((Integer) getJTableSeptember().getValueAt(row, col), 9, getSelectedYear());
-	}
-
-	/**
 	 * Loads the given day from the database and updates the form.
-	 * @param date the day of the month
-	 * @param month the month of the year
-	 * @param year the year
+	 * 
+	 * @param date
+	 *            the day of the month
+	 * @param month
+	 *            the month of the year
+	 * @param year
+	 *            the year
 	 */
 	private void loadDay(Integer date, Integer month, Integer year) {
 		if (getSelectedDay() != null) {
 			Day.save(getSelectedDay());
 		}
+
+		clearAllTableSelections(month);
+
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, date);
 		cal.set(Calendar.MONTH, month - 1);
@@ -1391,6 +1421,9 @@ public class MainFrame extends JFrame {
 		getJCheckBoxCoOp().setSelected(getSelectedDay().isCoopDay());
 		getJRadioButtonSick().setSelected(getSelectedDay().isSickDay());
 		getJRadioButtonVacation().setSelected(getSelectedDay().isVacationDay());
+		if (!getSelectedDay().isCoopDay() && !getSelectedDay().isSickDay() && !getSelectedDay().isVacationDay()) {
+			buttonGroupAttendance.clearSelection();
+		}
 		getJPanelDayDetails().repaint();
 	}
 
@@ -1398,11 +1431,6 @@ public class MainFrame extends JFrame {
 	 * Updates all the calendars for the selected year.
 	 */
 	private void refreshCalenders() {
-		getJTableJanuary().setModel(new MonthTableModel(1, getSelectedYear()));
-		getJTableFebruary().setModel(new MonthTableModel(2, getSelectedYear()));
-		getJTableMarch().setModel(new MonthTableModel(3, getSelectedYear()));
-		getJTableApril().setModel(new MonthTableModel(4, getSelectedYear()));
-		getJTableMay().setModel(new MonthTableModel(5, getSelectedYear()));
 		getJTableJune().setModel(new MonthTableModel(6, getSelectedYear()));
 		getJTableJuly().setModel(new MonthTableModel(7, getSelectedYear()));
 		getJTableAugust().setModel(new MonthTableModel(8, getSelectedYear()));
@@ -1410,6 +1438,11 @@ public class MainFrame extends JFrame {
 		getJTableOctober().setModel(new MonthTableModel(10, getSelectedYear()));
 		getJTableNovember().setModel(new MonthTableModel(11, getSelectedYear()));
 		getJTableDecember().setModel(new MonthTableModel(12, getSelectedYear()));
+		getJTableJanuary().setModel(new MonthTableModel(1, getSelectedYear() + 1));
+		getJTableFebruary().setModel(new MonthTableModel(2, getSelectedYear() + 1));
+		getJTableMarch().setModel(new MonthTableModel(3, getSelectedYear() + 1));
+		getJTableApril().setModel(new MonthTableModel(4, getSelectedYear() + 1));
+		getJTableMay().setModel(new MonthTableModel(5, getSelectedYear() + 1));
 	}
 
 	/**
