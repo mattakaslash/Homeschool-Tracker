@@ -20,7 +20,7 @@ public class SchoolYear {
 	 * 
 	 * @return the date the current school year began
 	 */
-	public static Date getStart() {
+	public static Calendar getStart() {
 		Calendar now = Calendar.getInstance();
 		now.setTime(new Date());
 
@@ -32,7 +32,7 @@ public class SchoolYear {
 			start.set(Calendar.YEAR, start.get(Calendar.YEAR) - 1);
 		}
 
-		return start.getTime();
+		return start;
 	}
 
 	/**

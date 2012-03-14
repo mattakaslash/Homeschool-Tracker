@@ -4,6 +4,7 @@ import ht.model.Day;
 import ht.model.MonthTableModel;
 import ht.model.Student;
 import ht.util.MonthTableSelectionListener;
+import ht.util.SchoolYear;
 import ht.view.render.MonthTableRenderer;
 import ht.view.render.StudentCellRenderer;
 
@@ -65,18 +66,9 @@ public class MainFrame extends JFrame {
 	private static final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
 	/**
-	 * Renderer for month tables.
-	 */
-	private static final MonthTableRenderer monthTableRenderer = new MonthTableRenderer();
-
-	/**
 	 * Generated.
 	 */
 	private static final long serialVersionUID = 8444716793871398441L;
-
-	private static MonthTableRenderer getMonthTableRenderer() {
-		return monthTableRenderer;
-	}
 
 	/**
 	 * Stores the currently-selected school day.
@@ -91,7 +83,8 @@ public class MainFrame extends JFrame {
 	/**
 	 * Stores the currently selected year from the year tab.
 	 */
-	private Integer _selectedYear = Calendar.getInstance().get(Calendar.YEAR);
+	private Integer _selectedYear = SchoolYear.getStart().get(Calendar.YEAR);
+
 	private ButtonGroup buttonGroupAttendance;
 	private JButton jButtonNextYear;
 	private JButton jButtonPrevYear;
@@ -151,8 +144,8 @@ public class MainFrame extends JFrame {
 	private JTable jTableMay;
 	private JTable jTableNovember;
 	private JTable jTableOctober;
-
 	private JTable jTableSeptember;
+	private JPanel jPanelDay;
 
 	/**
 	 * Defines a new frame.
@@ -161,18 +154,18 @@ public class MainFrame extends JFrame {
 		initComponents();
 
 		// set table renderers
-		getJTableJune().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableJuly().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableAugust().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableSeptember().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableOctober().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableNovember().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableDecember().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableJanuary().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableFebruary().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableMarch().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableApril().setDefaultRenderer(Integer.class, getMonthTableRenderer());
-		getJTableMay().setDefaultRenderer(Integer.class, getMonthTableRenderer());
+		getJTableJune().setDefaultRenderer(Integer.class, new MonthTableRenderer(6));
+		getJTableJuly().setDefaultRenderer(Integer.class, new MonthTableRenderer(7));
+		getJTableAugust().setDefaultRenderer(Integer.class, new MonthTableRenderer(8));
+		getJTableSeptember().setDefaultRenderer(Integer.class, new MonthTableRenderer(9));
+		getJTableOctober().setDefaultRenderer(Integer.class, new MonthTableRenderer(10));
+		getJTableNovember().setDefaultRenderer(Integer.class, new MonthTableRenderer(11));
+		getJTableDecember().setDefaultRenderer(Integer.class, new MonthTableRenderer(12));
+		getJTableJanuary().setDefaultRenderer(Integer.class, new MonthTableRenderer(1));
+		getJTableFebruary().setDefaultRenderer(Integer.class, new MonthTableRenderer(2));
+		getJTableMarch().setDefaultRenderer(Integer.class, new MonthTableRenderer(3));
+		getJTableApril().setDefaultRenderer(Integer.class, new MonthTableRenderer(4));
+		getJTableMay().setDefaultRenderer(Integer.class, new MonthTableRenderer(5));
 
 		// set row selection listeners
 		getJTableJune().getSelectionModel().addListSelectionListener(new MonthTableSelectionListener(getJTableJune()) {
@@ -929,6 +922,7 @@ public class MainFrame extends JFrame {
 			jTabbedPaneTabs = new JTabbedPane();
 			jTabbedPaneTabs.addTab("Students", getJPanelStudents());
 			jTabbedPaneTabs.addTab("Year", getJPanelYear());
+			jTabbedPaneTabs.addTab("Day", getJPanelDay());
 		}
 		return jTabbedPaneTabs;
 	}
@@ -1206,7 +1200,6 @@ public class MainFrame extends JFrame {
 		buttonGroupAttendance.add(getJRadioButtonHadSchool());
 		buttonGroupAttendance.add(getJRadioButtonSick());
 		buttonGroupAttendance.add(getJRadioButtonVacation());
-		buttonGroupAttendance.clearSelection();
 	}
 
 	private void initComponents() {
@@ -1217,7 +1210,15 @@ public class MainFrame extends JFrame {
 		add(getJTabbedPaneTabs(), BorderLayout.CENTER);
 		setJMenuBar(getJMenuBarMain());
 		initButtonGroupAttendance();
-		setSize(1024, 668);
+		pack();
+	}
+
+	private JPanel getJPanelDay() {
+		if (jPanelDay == null) {
+			jPanelDay = new JPanel();
+			jPanelDay.setLayout(new GroupLayout());
+		}
+		return jPanelDay;
 	}
 
 	/**
@@ -1309,7 +1310,7 @@ public class MainFrame extends JFrame {
 		Student s = (Student) getJListStudentList().getSelectedValue();
 		if (s != null) {
 			setSelectedStudent(s);
-			setTitle("Homeschool Tracker [" + s.toString() + "]");
+			setTitle("Homeschool Tracker [" + s.getFullName() + "]");
 			refreshCalenders();
 			getJTabbedPaneTabs().setSelectedIndex(1);
 		}
@@ -1359,6 +1360,9 @@ public class MainFrame extends JFrame {
 		if (getJLabelYear().getText().contentEquals("0000")) {
 			getJLabelYear().setText(getSelectedYear().toString() + " - " + (getSelectedYear() + 1));
 		}
+		if (getSelectedDay() == null) {
+			loadDay(Calendar.getInstance());
+		}
 	}
 
 	/**
@@ -1405,16 +1409,26 @@ public class MainFrame extends JFrame {
 	 *            the year
 	 */
 	private void loadDay(Integer date, Integer month, Integer year) {
-		if (getSelectedDay() != null) {
-			Day.save(getSelectedDay());
-		}
-
-		clearAllTableSelections(month);
-
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH, date);
 		cal.set(Calendar.MONTH, month - 1);
 		cal.set(Calendar.YEAR, year);
+		loadDay(cal);
+	}
+
+	/**
+	 * Loads the given day from the database and updates the form.
+	 * 
+	 * @param cal
+	 *            a calendar set to the requested day
+	 */
+	private void loadDay(Calendar cal) {
+		if (getSelectedDay() != null) {
+			Day.save(getSelectedDay());
+		}
+
+		clearAllTableSelections(cal.get(Calendar.MONTH) + 1);
+
 		setSelectedDay(Day.get(cal.getTime()));
 		((TitledBorder) getJPanelDayDetails().getBorder()).setTitle("Details for " + dateFormat.format(getSelectedDay().getDate()));
 		getJRadioButtonHadSchool().setSelected(getSelectedDay().hadSchool());

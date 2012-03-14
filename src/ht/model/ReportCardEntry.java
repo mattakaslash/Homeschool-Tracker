@@ -5,6 +5,7 @@ package ht.model;
 
 import ht.util.SchoolYear;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -54,7 +55,7 @@ public class ReportCardEntry {
 	 * Creates a default report card entry for the current year and quarter.
 	 */
 	public ReportCardEntry() {
-		setYearStarting(SchoolYear.getStart());
+		setYearStarting(SchoolYear.getStart().getTime());
 		setQuarter(SchoolYear.getQuarter(getYearStarting(), new Date()));
 		setTopic(null);
 		setGrade(null);

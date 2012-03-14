@@ -17,6 +17,7 @@ import ht.model.Subject;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
+@SuppressWarnings("javadoc")
 public class DatabaseDump {
 
 	/**
@@ -24,10 +25,7 @@ public class DatabaseDump {
 	 */
 	public static void main(String[] args) {
 		EntityManager em = Persistence.createEntityManagerFactory("records").createEntityManager();
-		Class<?>[] entities = { Assignment.class, Category.class, Concept.class, ConfigurationEntry.class,
-				CurriculumLogEntry.class, Day.class, FieldTrip.class, JournalEntry.class, PlannerEntry.class,
-				ReadingListEntry.class, ReportCardEntry.class, Student.class, Subject.class };
-
+		
 		System.out.println("Assignment");
 		System.out.println("---------------------------------------------------------------------------------------------");
 		for (Object o : em.createQuery("select o from Assignment o").getResultList()) {

@@ -26,134 +26,18 @@ import javax.persistence.TemporalType;
  */
 @Entity
 public class Student {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID")
-	private Long _id;
-	
-	@Column(name = "FIRST_NAME")
-	private String _firstName;
-	
-	@Column(name = "MIDDLE_NAME")
-	private String _middleName;
-	
-	@Column(name = "LAST_NAME")
-	private String _lastName;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "BIRTHDATE")
-	private Date _birthdate;
-
-	/**
-	 * Creates a new student with no name and today as the birthdate.
-	 */
-	public Student() {
-		setFirstName("");
-		setMiddleName("");
-		setLastName("");
-		setBirthdate(new Date());
-	}
-
-	/**
-	 * @return the id
-	 */
-	private Long getId() {
-		return _id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	private void setId(Long id) {
-		_id = id;
-	}
-
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName() {
-		return _firstName;
-	}
-
-	/**
-	 * @param firstName the firstName to set
-	 */
-	public void setFirstName(String firstName) {
-		_firstName = firstName;
-	}
-
-	/**
-	 * @return the middleName
-	 */
-	public String getMiddleName() {
-		return _middleName;
-	}
-
-	/**
-	 * @param middleName the middleName to set
-	 */
-	public void setMiddleName(String middleName) {
-		_middleName = middleName;
-	}
-
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		return _lastName;
-	}
-
-	/**
-	 * @param lastName the lastName to set
-	 */
-	public void setLastName(String lastName) {
-		_lastName = lastName;
-	}
-
-	/**
-	 * @return the birthdate
-	 */
-	public Date getBirthdate() {
-		return _birthdate;
-	}
-
-	/**
-	 * @param birthdate the birthdate to set
-	 */
-	public void setBirthdate(Date birthdate) {
-		_birthdate = birthdate;
-	}
-	
-	/* (non-javadoc)
-	 * @see java.lang.Object#toString
-	 */
-	@Override
-	public String toString() {
-		String result = "";
-		if (getFirstName() != null) {
-			result += getFirstName();
-		}
-		if (getMiddleName() != null) {
-			result += " " + getMiddleName();
-		}
-		if (getLastName() != null) {
-			result += " " + getLastName();
-		}
-		return result.trim();
-	}
-
 	/**
 	 * @return a list of all students
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Student> getAll() {
 		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
-		Query q = em.createQuery("SELECT s FROM Student s");
+		Query q = em.createQuery("SELECT s FROM Student s ORDER BY s._birthdate");
 		List<Student> results = q.getResultList();
 		em.close();
 		return results;
 	}
-
+	
 	/**
 	 * Deletes the provided student.
 	 * @param student the student to be deleted
@@ -166,7 +50,7 @@ public class Student {
 		em.getTransaction().commit();
 		em.close();
 	}
-
+	
 	/**
 	 * Saves a given student to the database.
 	 * @param student
@@ -177,5 +61,135 @@ public class Student {
 		em.merge(student);
 		em.getTransaction().commit();
 		em.close();
+	}
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "BIRTHDATE")
+	private Date _birthdate;
+	
+	@Column(name = "FIRST_NAME")
+	private String _firstName;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
+	private Long _id;
+
+	@Column(name = "LAST_NAME")
+	private String _lastName;
+
+	@Column(name = "MIDDLE_NAME")
+	private String _middleName;
+
+	/**
+	 * Creates a new student with no name and today as the birthdate.
+	 */
+	public Student() {
+		setFirstName("");
+		setMiddleName("");
+		setLastName("");
+		setBirthdate(new Date());
+	}
+
+	/**
+	 * @return the birthdate
+	 */
+	public Date getBirthdate() {
+		return _birthdate;
+	}
+
+	/**
+	 * @return the firstName
+	 */
+	public String getFirstName() {
+		return _firstName;
+	}
+
+	/**
+	 * Returns the student's full name as First Middle Last
+	 * @return the full name
+	 */
+	public String getFullName() {
+		String result = "";
+		if (getFirstName() != null) {
+			result += getFirstName();
+		}
+		if (getMiddleName() != null) {
+			result += " " + getMiddleName();
+		}
+		if (getLastName() != null) {
+			result += " " + getLastName();
+		}
+		return result;
+	}
+
+	/**
+	 * @return the id
+	 */
+	@SuppressWarnings("unused")
+	private Long getId() {
+		return _id;
+	}
+
+	/**
+	 * @return the lastName
+	 */
+	public String getLastName() {
+		return _lastName;
+	}
+
+	/**
+	 * @return the middleName
+	 */
+	public String getMiddleName() {
+		return _middleName;
+	}
+
+	/**
+	 * @param birthdate the birthdate to set
+	 */
+	public void setBirthdate(Date birthdate) {
+		_birthdate = birthdate;
+	}
+
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		_firstName = firstName;
+	}
+	
+	/**
+	 * @param id the id to set
+	 */
+	@SuppressWarnings("unused")
+	private void setId(Long id) {
+		_id = id;
+	}
+
+	/**
+	 * @param lastName the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		_lastName = lastName;
+	}
+
+	/**
+	 * @param middleName the middleName to set
+	 */
+	public void setMiddleName(String middleName) {
+		_middleName = middleName;
+	}
+
+	/* (non-javadoc)
+	 * @see java.lang.Object#toString
+	 */
+	@Override
+	public String toString() {
+		String result = getFullName();
+		if (getBirthdate() != null) {
+			result += " Born: " + getBirthdate().toString();
+		}
+		return result.trim();
 	}
 }

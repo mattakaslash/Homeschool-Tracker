@@ -167,4 +167,16 @@ public class Day {
 	public void setVacationDay(Boolean vacationDay) {
 		_vacationDay = vacationDay;
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		String value = getDate().toString() + ": \n";
+		value += "HAD_SCHOOL: " + hadSchool() + ", ";
+		value += "COOP: " + isCoopDay() + ", ";
+		value += "SICK: " + isSickDay() + ", ";
+		value += "VACATION: " + isVacationDay();
+		return value;
+	}
 }
