@@ -27,11 +27,7 @@ public class Day {
 	 * Retrieves the requested day from the database and returns it.
 	 * 
 	 * @param date
-	 *            the day of the month
-	 * @param month
-	 *            the month of the year
-	 * @param year
-	 *            the year
+	 *            the date
 	 * @return the day
 	 */
 	public static Day get(Date date) {
@@ -43,6 +39,18 @@ public class Day {
 		} else {
 			return (Day) q.getSingleResult();
 		}
+	}
+
+	/**
+	 * Saves a given day to the database.
+	 * @param day
+	 */
+	public static void save(Day day) {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		em.getTransaction().begin();
+		em.merge(day);
+		em.getTransaction().commit();
+		em.close();
 	}
 
 	@Column(name = "COOP")
@@ -88,35 +96,35 @@ public class Day {
 	/**
 	 * @return the date
 	 */
-	private Date getDate() {
+	public Date getDate() {
 		return _date;
 	}
 
 	/**
 	 * @return the hadSchool
 	 */
-	private Boolean hadSchool() {
+	public Boolean hadSchool() {
 		return _hadSchool;
 	}
 
 	/**
 	 * @return the coopDay
 	 */
-	private Boolean isCoopDay() {
+	public Boolean isCoopDay() {
 		return _coopDay;
 	}
 
 	/**
 	 * @return the sickDay
 	 */
-	private Boolean isSickDay() {
+	public Boolean isSickDay() {
 		return _sickDay;
 	}
 
 	/**
 	 * @return the vacationDay
 	 */
-	private Boolean isVacationDay() {
+	public Boolean isVacationDay() {
 		return _vacationDay;
 	}
 
@@ -124,7 +132,7 @@ public class Day {
 	 * @param coopDay
 	 *            the coopDay to set
 	 */
-	private void setCoopDay(Boolean coopDay) {
+	public void setCoopDay(Boolean coopDay) {
 		_coopDay = coopDay;
 	}
 
@@ -140,7 +148,7 @@ public class Day {
 	 * @param hadSchool
 	 *            the hadSchool to set
 	 */
-	private void setHadSchool(Boolean hadSchool) {
+	public void setHadSchool(Boolean hadSchool) {
 		_hadSchool = hadSchool;
 	}
 
@@ -148,7 +156,7 @@ public class Day {
 	 * @param sickDay
 	 *            the sickDay to set
 	 */
-	private void setSickDay(Boolean sickDay) {
+	public void setSickDay(Boolean sickDay) {
 		_sickDay = sickDay;
 	}
 
@@ -156,7 +164,7 @@ public class Day {
 	 * @param vacationDay
 	 *            the vacationDay to set
 	 */
-	private void setVacationDay(Boolean vacationDay) {
+	public void setVacationDay(Boolean vacationDay) {
 		_vacationDay = vacationDay;
 	}
 }
