@@ -1,6 +1,5 @@
 package ht.view;
 
-import ht.model.CurriculumLogEntry;
 import ht.model.Day;
 import ht.model.FieldTrip;
 import ht.model.Student;
@@ -49,7 +48,6 @@ import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -100,7 +98,6 @@ public class MainFrame extends JFrame {
 	private ButtonGroup buttonGroupAttendance;
 	private JButton jButtonCurriculumAdd;
 	private JButton jButtonCurriculumDelete;
-	private JButton jButtonCurriculumSave;
 	private JButton jButtonNextYear;
 	private JButton jButtonPrevYear;
 	private JButton jButtonStudentsAdd;
@@ -443,14 +440,6 @@ public class MainFrame extends JFrame {
 		return jButtonCurriculumDelete;
 	}
 
-	private JButton getJButtonCurriculumSave() {
-		if (jButtonCurriculumSave == null) {
-			jButtonCurriculumSave = new JButton();
-			jButtonCurriculumSave.setText("Save");
-		}
-		return jButtonCurriculumSave;
-	}
-
 	private JButton getJButtonNextYear() {
 		if (jButtonNextYear == null) {
 			jButtonNextYear = new JButton();
@@ -769,7 +758,6 @@ public class MainFrame extends JFrame {
 		if (jPanelCurriculumControls == null) {
 			jPanelCurriculumControls = new JPanel();
 			jPanelCurriculumControls.add(getJButtonCurriculumAdd());
-			jPanelCurriculumControls.add(getJButtonCurriculumSave());
 			jPanelCurriculumControls.add(getJButtonCurriculumDelete());
 		}
 		return jPanelCurriculumControls;

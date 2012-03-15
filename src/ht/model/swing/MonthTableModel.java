@@ -166,13 +166,6 @@ public class MonthTableModel implements TableModel {
 	}
 
 	/**
-	 * @param listeners the listeners to set
-	 */
-	private void setListeners(List<TableModelListener> listeners) {
-		_listeners = listeners;
-	}
-
-	/**
 	 * @return the ref
 	 */
 	private Calendar getRef() {
