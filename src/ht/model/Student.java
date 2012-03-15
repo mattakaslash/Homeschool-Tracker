@@ -37,10 +37,12 @@ public class Student {
 		em.close();
 		return results;
 	}
-	
+
 	/**
 	 * Deletes the provided student.
-	 * @param student the student to be deleted
+	 * 
+	 * @param student
+	 *            the student to be deleted
 	 */
 	public static void remove(Student student) {
 		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
@@ -50,9 +52,10 @@ public class Student {
 		em.getTransaction().commit();
 		em.close();
 	}
-	
+
 	/**
 	 * Saves a given student to the database.
+	 * 
 	 * @param student
 	 */
 	public static void save(Student student) {
@@ -62,11 +65,11 @@ public class Student {
 		em.getTransaction().commit();
 		em.close();
 	}
-	
+
 	@Temporal(TemporalType.DATE)
 	@Column(name = "BIRTHDATE")
 	private Date _birthdate;
-	
+
 	@Column(name = "FIRST_NAME")
 	private String _firstName;
 
@@ -107,6 +110,7 @@ public class Student {
 
 	/**
 	 * Returns the student's full name as First Middle Last
+	 * 
 	 * @return the full name
 	 */
 	public String getFullName() {
@@ -126,8 +130,7 @@ public class Student {
 	/**
 	 * @return the id
 	 */
-	@SuppressWarnings("unused")
-	private Long getId() {
+	public Long getId() {
 		return _id;
 	}
 
@@ -146,21 +149,24 @@ public class Student {
 	}
 
 	/**
-	 * @param birthdate the birthdate to set
+	 * @param birthdate
+	 *            the birthdate to set
 	 */
 	public void setBirthdate(Date birthdate) {
 		_birthdate = birthdate;
 	}
 
 	/**
-	 * @param firstName the firstName to set
+	 * @param firstName
+	 *            the firstName to set
 	 */
 	public void setFirstName(String firstName) {
 		_firstName = firstName;
 	}
-	
+
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	@SuppressWarnings("unused")
 	private void setId(Long id) {
@@ -168,20 +174,24 @@ public class Student {
 	}
 
 	/**
-	 * @param lastName the lastName to set
+	 * @param lastName
+	 *            the lastName to set
 	 */
 	public void setLastName(String lastName) {
 		_lastName = lastName;
 	}
 
 	/**
-	 * @param middleName the middleName to set
+	 * @param middleName
+	 *            the middleName to set
 	 */
 	public void setMiddleName(String middleName) {
 		_middleName = middleName;
 	}
 
-	/* (non-javadoc)
+	/*
+	 * (non-javadoc)
+	 * 
 	 * @see java.lang.Object#toString
 	 */
 	@Override

@@ -75,11 +75,11 @@ public class MainFrame extends JFrame {
 	 * Standard date format.
 	 */
 	private static final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-	
+
 	/**
 	 * Stores the data model for the reading list table.
 	 */
-	private static final TableModel readingListTableModel = new ReadingListTableModel();
+	private static final ReadingListTableModel readingListTableModel = new ReadingListTableModel();
 
 	/**
 	 * Generated.
@@ -106,6 +106,8 @@ public class MainFrame extends JFrame {
 	private JButton jButtonCurriculumDelete;
 	private JButton jButtonNextYear;
 	private JButton jButtonPrevYear;
+	private JButton jButtonReadingListAdd;
+	private JButton jButtonReadingListDelete;
 	private JButton jButtonStudentsAdd;
 	private JButton jButtonStudentsDelete;
 	private JButton jButtonStudentsEdit;
@@ -138,6 +140,7 @@ public class MainFrame extends JFrame {
 	private JPanel jPanelFieldTrip;
 	private JPanel jPanelFieldTripNotes;
 	private JPanel jPanelReadingList;
+	private JPanel jPanelReadingListControls;
 	private JPanel jPanelStudents;
 	private JPanel jPanelYear;
 	private JPanel jPanelYearPicker;
@@ -180,11 +183,11 @@ public class MainFrame extends JFrame {
 	private JTextPane jTextPaneFieldTripNotes;
 
 	/**
-	 * Defines a new frame.
+	 * Defines the application's main interface.
 	 */
 	public MainFrame() {
 		initComponents();
-		
+
 		// disable tabs requiring selections
 		setTabsEnabled(false);
 
@@ -484,6 +487,36 @@ public class MainFrame extends JFrame {
 			});
 		}
 		return jButtonPrevYear;
+	}
+
+	private JButton getJButtonReadingListAdd() {
+		if (jButtonReadingListAdd == null) {
+			jButtonReadingListAdd = new JButton();
+			jButtonReadingListAdd.setText("Add");
+			jButtonReadingListAdd.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					jButtonReadingListAddActionActionPerformed(event);
+				}
+			});
+		}
+		return jButtonReadingListAdd;
+	}
+
+	private JButton getJButtonReadingListDelete() {
+		if (jButtonReadingListDelete == null) {
+			jButtonReadingListDelete = new JButton();
+			jButtonReadingListDelete.setText("Delete");
+			jButtonReadingListDelete.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					jButtonReadingListDeleteActionActionPerformed(event);
+				}
+			});
+		}
+		return jButtonReadingListDelete;
 	}
 
 	private JButton getJButtonStudentsAdd() {
@@ -836,8 +869,25 @@ public class MainFrame extends JFrame {
 			jPanelReadingList = new JPanel();
 			jPanelReadingList.setLayout(new BorderLayout());
 			jPanelReadingList.add(getJScrollPaneReadingList(), BorderLayout.CENTER);
+			jPanelReadingList.add(getJPanelReadingListControls(), BorderLayout.SOUTH);
+			jPanelReadingList.addComponentListener(new ComponentAdapter() {
+
+				@Override
+				public void componentShown(ComponentEvent event) {
+					jPanelReadingListComponentComponentShown(event);
+				}
+			});
 		}
 		return jPanelReadingList;
+	}
+
+	private JPanel getJPanelReadingListControls() {
+		if (jPanelReadingListControls == null) {
+			jPanelReadingListControls = new JPanel();
+			jPanelReadingListControls.add(getJButtonReadingListAdd());
+			jPanelReadingListControls.add(getJButtonReadingListDelete());
+		}
+		return jPanelReadingListControls;
 	}
 
 	private JPanel getJPanelStudents() {
@@ -1419,7 +1469,7 @@ public class MainFrame extends JFrame {
 		add(getJTabbedPaneTabs(), BorderLayout.CENTER);
 		setJMenuBar(getJMenuBarMain());
 		initButtonGroupAttendance();
-		pack();
+		setSize(983, 668);
 	}
 
 	/**
@@ -1475,6 +1525,29 @@ public class MainFrame extends JFrame {
 		setSelectedYear(getSelectedYear() - 1);
 		getJLabelYear().setText(getSelectedYear().toString() + " - " + (getSelectedYear() + 1));
 		refreshCalenders();
+	}
+
+	private void jButtonReadingListAddActionActionPerformed(ActionEvent event) {
+		((ReadingListTableModel) getJTableReadingList().getModel()).add();
+	}
+
+	private void jButtonReadingListDeleteActionActionPerformed(ActionEvent event) {
+		if (getJTableReadingList().getSelectedRowCount() > 0) {
+			int[] rows = getJTableCurriculum().getSelectedRows();
+			StringBuilder titles = new StringBuilder();
+			for (int row : rows) {
+				titles.append((String) getJTableReadingList().getValueAt(row, 0));
+				titles.append('\n');
+			}
+
+			int n = JOptionPane.showConfirmDialog(this, "Delete the following titles?\n\n" + titles.toString(), "Are you sure?",
+					JOptionPane.YES_NO_OPTION);
+			if (n == JOptionPane.YES_OPTION) {
+				for (int x = rows.length - 1; x >= 0; x--) {
+					((ReadingListTableModel) getJTableReadingList().getModel()).delete(rows[x]);
+				}
+			}
+		}
 	}
 
 	/**
@@ -1584,6 +1657,19 @@ public class MainFrame extends JFrame {
 	 */
 	private void jPanelCurriculumComponentComponentShown(ComponentEvent event) {
 		getJTableCurriculum().setModel(curriculumTableModel);
+	}
+
+	/**
+	 * Event: Reading List tab shown.
+	 * 
+	 * @param event
+	 */
+	private void jPanelReadingListComponentComponentShown(ComponentEvent event) {
+		if (getSelectedStudent() != null) {
+			readingListTableModel.setStudent(getSelectedStudent());
+			getJTableReadingList().setModel(readingListTableModel);
+			getJTableReadingList().repaint();
+		}
 	}
 
 	/**
@@ -1762,10 +1848,11 @@ public class MainFrame extends JFrame {
 	/**
 	 * Enables/disables tabs that require a selected student.
 	 * 
-	 * @param value true, if tabs should be enabled
+	 * @param value
+	 *            true, if tabs should be enabled
 	 */
 	private void setTabsEnabled(Boolean value) {
 		getJTabbedPaneTabs().setEnabledAt(2, value);
-		getJTabbedPaneTabs().setEnabledAt(3, value);		
+		getJTabbedPaneTabs().setEnabledAt(3, value);
 	}
 }
