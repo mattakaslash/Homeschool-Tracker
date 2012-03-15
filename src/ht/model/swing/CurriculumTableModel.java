@@ -3,7 +3,6 @@
  */
 package ht.model.swing;
 
-import ht.HomeschoolTracker;
 import ht.model.CurriculumLogEntry;
 
 import java.net.MalformedURLException;
