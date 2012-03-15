@@ -21,6 +21,9 @@ import javax.swing.table.TableModel;
  * @since 1.0
  */
 public class CurriculumTableModel implements TableModel {
+	/**
+	 * A list of registered listeners.
+	 */
 	private List<TableModelListener> _listeners = new ArrayList<TableModelListener>();
 
 	/**
