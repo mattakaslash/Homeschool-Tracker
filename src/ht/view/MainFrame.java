@@ -2,8 +2,8 @@ package ht.view;
 
 import ht.model.Day;
 import ht.model.FieldTrip;
-import ht.model.MonthTableModel;
 import ht.model.Student;
+import ht.model.swing.MonthTableModel;
 import ht.util.MonthTableSelectionListener;
 import ht.util.SchoolYear;
 import ht.view.render.MonthTableRenderer;

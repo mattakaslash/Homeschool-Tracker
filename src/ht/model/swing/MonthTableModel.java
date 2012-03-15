@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ht.model;
+package ht.model.swing;
 
 import java.util.ArrayList;
 import java.util.Calendar;

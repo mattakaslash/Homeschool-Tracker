@@ -3,7 +3,7 @@
  */
 package ht.view.render;
 
-import ht.model.MonthTableModel;
+import ht.model.swing.MonthTableModel;
 
 import java.awt.Color;
 import java.awt.Component;
