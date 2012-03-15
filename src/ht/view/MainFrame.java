@@ -436,6 +436,13 @@ public class MainFrame extends JFrame {
 		if (jButtonCurriculumDelete == null) {
 			jButtonCurriculumDelete = new JButton();
 			jButtonCurriculumDelete.setText("Delete");
+			jButtonCurriculumDelete.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					jButtonCurriculumDeleteActionActionPerformed(event);
+				}
+			});
 		}
 		return jButtonCurriculumDelete;
 	}
@@ -1389,6 +1396,30 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
+	 * Event: Curriculum Delete button pressed.
+	 * 
+	 * @param event
+	 */
+	private void jButtonCurriculumDeleteActionActionPerformed(ActionEvent event) {
+		if (getJTableCurriculum().getSelectedRowCount() > 0) {
+			int[] rows = getJTableCurriculum().getSelectedRows();
+			StringBuilder titles = new StringBuilder();
+			for (int row : rows) {
+				titles.append((String) getJTableCurriculum().getValueAt(row, 0));
+				titles.append('\n');
+			}
+
+			int n = JOptionPane.showConfirmDialog(this, "Delete the following titles?\n\n" + titles.toString(), "Are you sure?",
+					JOptionPane.YES_NO_OPTION);
+			if (n == JOptionPane.YES_OPTION) {
+				for (int x = rows.length - 1; x >= 0; x--) {
+					((CurriculumTableModel) getJTableCurriculum().getModel()).delete(rows[x]);
+				}
+			}
+		}
+	}
+
+	/**
 	 * Event: Next year button pressed.
 	 * 
 	 * @param event
@@ -1515,7 +1546,7 @@ public class MainFrame extends JFrame {
 	 * @param event
 	 */
 	private void jPanelCurriculumComponentComponentShown(ComponentEvent event) {
-		 getJTableCurriculum().setModel(curriculumTableModel);
+		getJTableCurriculum().setModel(curriculumTableModel);
 	}
 
 	/**

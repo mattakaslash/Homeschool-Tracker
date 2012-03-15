@@ -3,6 +3,7 @@
  */
 package ht.model.swing;
 
+import ht.HomeschoolTracker;
 import ht.model.CurriculumLogEntry;
 
 import java.net.MalformedURLException;
@@ -34,6 +35,16 @@ public class CurriculumTableModel implements TableModel {
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 		getListeners().add(l);
+	}
+
+	/**
+	 * Deletes the given entry from the database.
+	 * 
+	 * @param row the row index
+	 */
+	public void delete(int row) {
+		CurriculumLogEntry.remove(row);
+		tableChanged(new TableModelEvent(this, row, row, TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
 	}
 
 	/*
@@ -187,7 +198,7 @@ public class CurriculumTableModel implements TableModel {
 		}
 
 		CurriculumLogEntry.save(entry);
-		tableChanged(new TableModelEvent(this, row, row, col, TableModelEvent.UPDATE));
+		tableChanged(new TableModelEvent(this));
 	}
 
 	/**

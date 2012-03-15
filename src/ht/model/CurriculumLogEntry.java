@@ -59,6 +59,20 @@ public class CurriculumLogEntry {
 	}
 
 	/**
+	 * Deletes the entry at the specific index.
+	 * 
+	 * @param index the index
+	 */
+	public static void remove(int index) {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		CurriculumLogEntry entry = em.merge(get(index));
+		em.getTransaction().begin();
+		em.remove(entry);
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	/**
 	 * Saves the given entry to the database.
 	 * 
 	 * @param entry
