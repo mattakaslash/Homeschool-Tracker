@@ -5,6 +5,7 @@ import ht.model.FieldTrip;
 import ht.model.Student;
 import ht.model.swing.CurriculumTableModel;
 import ht.model.swing.MonthTableModel;
+import ht.model.swing.ReadingListTableModel;
 import ht.util.MonthTableSelectionListener;
 import ht.util.SchoolYear;
 import ht.view.render.MonthTableRenderer;
@@ -74,6 +75,11 @@ public class MainFrame extends JFrame {
 	 * Standard date format.
 	 */
 	private static final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+	
+	/**
+	 * Stores the data model for the reading list table.
+	 */
+	private static final TableModel readingListTableModel = new ReadingListTableModel();
 
 	/**
 	 * Generated.
@@ -131,6 +137,7 @@ public class MainFrame extends JFrame {
 	private JPanel jPanelDayDetails;
 	private JPanel jPanelFieldTrip;
 	private JPanel jPanelFieldTripNotes;
+	private JPanel jPanelReadingList;
 	private JPanel jPanelStudents;
 	private JPanel jPanelYear;
 	private JPanel jPanelYearPicker;
@@ -150,6 +157,7 @@ public class MainFrame extends JFrame {
 	private JScrollPane jScrollPaneMay;
 	private JScrollPane jScrollPaneNovember;
 	private JScrollPane jScrollPaneOctober;
+	private JScrollPane jScrollPaneReadingList;
 	private JScrollPane jScrollPaneSeptember;
 	private JScrollPane jScrollPaneStudentList;
 	private JTabbedPane jTabbedPaneTabs;
@@ -165,12 +173,10 @@ public class MainFrame extends JFrame {
 	private JTable jTableMay;
 	private JTable jTableNovember;
 	private JTable jTableOctober;
+	private JTable jTableReadingList;
 	private JTable jTableSeptember;
-
 	private JTextField jTextFieldFieldTripDescription;
-
 	private JTextField jTextFieldFieldTripLocation;
-
 	private JTextPane jTextPaneFieldTripNotes;
 
 	/**
@@ -178,6 +184,9 @@ public class MainFrame extends JFrame {
 	 */
 	public MainFrame() {
 		initComponents();
+		
+		// disable tabs requiring selections
+		setTabsEnabled(false);
 
 		// set table renderers
 		getJTableJune().setDefaultRenderer(Integer.class, new MonthTableRenderer(6));
@@ -822,6 +831,15 @@ public class MainFrame extends JFrame {
 		return jPanelFieldTripNotes;
 	}
 
+	private JPanel getJPanelReadingList() {
+		if (jPanelReadingList == null) {
+			jPanelReadingList = new JPanel();
+			jPanelReadingList.setLayout(new BorderLayout());
+			jPanelReadingList.add(getJScrollPaneReadingList(), BorderLayout.CENTER);
+		}
+		return jPanelReadingList;
+	}
+
 	private JPanel getJPanelStudents() {
 		if (jPanelStudents == null) {
 			jPanelStudents = new JPanel();
@@ -1045,6 +1063,14 @@ public class MainFrame extends JFrame {
 		return jScrollPaneOctober;
 	}
 
+	private JScrollPane getJScrollPaneReadingList() {
+		if (jScrollPaneReadingList == null) {
+			jScrollPaneReadingList = new JScrollPane();
+			jScrollPaneReadingList.setViewportView(getJTableReadingList());
+		}
+		return jScrollPaneReadingList;
+	}
+
 	private JScrollPane getJScrollPaneSeptember() {
 		if (jScrollPaneSeptember == null) {
 			jScrollPaneSeptember = new JScrollPane();
@@ -1067,6 +1093,7 @@ public class MainFrame extends JFrame {
 			jTabbedPaneTabs.addTab("Students", getJPanelStudents());
 			jTabbedPaneTabs.addTab("Curriculum", getJPanelCurriculum());
 			jTabbedPaneTabs.addTab("Year", getJPanelYear());
+			jTabbedPaneTabs.addTab("Reading List", getJPanelReadingList());
 		}
 		return jTabbedPaneTabs;
 	}
@@ -1305,6 +1332,15 @@ public class MainFrame extends JFrame {
 		return jTableOctober;
 	}
 
+	private JTable getJTableReadingList() {
+		if (jTableReadingList == null) {
+			jTableReadingList = new JTable();
+			jTableReadingList.setModel(new DefaultTableModel(new Object[0][0], new String[] { "Title", "Author", "Date Started",
+					"Date Finished", "Progress", "Assisted" }));
+		}
+		return jTableReadingList;
+	}
+
 	private JTable getJTableSeptember() {
 		if (jTableSeptember == null) {
 			jTableSeptember = new JTable();
@@ -1508,8 +1544,9 @@ public class MainFrame extends JFrame {
 		Student s = (Student) getJListStudentList().getSelectedValue();
 		if (s != null) {
 			setSelectedStudent(s);
-			setTitle("Homeschool Tracker [" + s.getFullName() + "]");
+			setTitle("Homeschool Tracker [" + s.getFullName().trim() + "]");
 			refreshCalenders();
+			setTabsEnabled(true);
 			getJTabbedPaneTabs().setSelectedIndex(2);
 		}
 	}
@@ -1720,5 +1757,15 @@ public class MainFrame extends JFrame {
 	 */
 	public void setSelectedYear(Integer selectedYear) {
 		_selectedYear = selectedYear;
+	}
+
+	/**
+	 * Enables/disables tabs that require a selected student.
+	 * 
+	 * @param value true, if tabs should be enabled
+	 */
+	private void setTabsEnabled(Boolean value) {
+		getJTabbedPaneTabs().setEnabledAt(2, value);
+		getJTabbedPaneTabs().setEnabledAt(3, value);		
 	}
 }
