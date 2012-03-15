@@ -159,6 +159,12 @@ public class MainFrame extends JFrame {
 	private JTextPane jTextPaneFieldTripNotes;
 
 	private JScrollPane jScrollPaneFieldTripNotes;
+
+	private JPanel jPanelCurriculum;
+
+	private JTable jTableCurriculum;
+
+	private JScrollPane jScrollPane0;
 	/**
 	 * Defines a new frame.
 	 */
@@ -933,6 +939,7 @@ public class MainFrame extends JFrame {
 		if (jTabbedPaneTabs == null) {
 			jTabbedPaneTabs = new JTabbedPane();
 			jTabbedPaneTabs.addTab("Students", getJPanelStudents());
+			jTabbedPaneTabs.addTab("Curriculum", getJPanelCurriculum());
 			jTabbedPaneTabs.addTab("Year", getJPanelYear());
 		}
 		return jTabbedPaneTabs;
@@ -1222,6 +1229,31 @@ public class MainFrame extends JFrame {
 		setJMenuBar(getJMenuBarMain());
 		initButtonGroupAttendance();
 		setSize(983, 668);
+	}
+
+	private JScrollPane getJScrollPane0() {
+		if (jScrollPane0 == null) {
+			jScrollPane0 = new JScrollPane();
+			jScrollPane0.setViewportView(getJTableCurriculum());
+		}
+		return jScrollPane0;
+	}
+
+	private JTable getJTableCurriculum() {
+		if (jTableCurriculum == null) {
+			jTableCurriculum = new JTable();
+			jTableCurriculum.setModel(new DefaultTableModel(new Object[0][0], new String[] { "Title", "Author", "URL", "Notes" } ));
+		}
+		return jTableCurriculum;
+	}
+
+	private JPanel getJPanelCurriculum() {
+		if (jPanelCurriculum == null) {
+			jPanelCurriculum = new JPanel();
+			jPanelCurriculum.setLayout(new BorderLayout());
+			jPanelCurriculum.add(getJScrollPane0(), BorderLayout.CENTER);
+		}
+		return jPanelCurriculum;
 	}
 
 	private JScrollPane getJScrollPaneFieldTripNotes() {
