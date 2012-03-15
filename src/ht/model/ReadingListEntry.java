@@ -37,7 +37,7 @@ public class ReadingListEntry {
 	 * @return the entry
 	 */
 	public static ReadingListEntry get(int row, Student student) {
-		return (ReadingListEntry) getAll(student).toArray()[row];
+		return (ReadingListEntry) getAll(student).get(row);
 	}
 
 	/**

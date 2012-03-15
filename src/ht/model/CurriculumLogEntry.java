@@ -40,7 +40,7 @@ public class CurriculumLogEntry {
 	 * @return the entry
 	 */
 	public static CurriculumLogEntry get(int index) {
-		return (CurriculumLogEntry) getAll().toArray()[index];
+		return (CurriculumLogEntry) getAll().get(index);
 	}
 
 	/**
@@ -61,7 +61,8 @@ public class CurriculumLogEntry {
 	/**
 	 * Deletes the entry at the specific index.
 	 * 
-	 * @param index the index
+	 * @param index
+	 *            the index
 	 */
 	public static void remove(int index) {
 		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
