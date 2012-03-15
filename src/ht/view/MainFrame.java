@@ -1,6 +1,7 @@
 package ht.view;
 
 import ht.model.Day;
+import ht.model.FieldTrip;
 import ht.model.MonthTableModel;
 import ht.model.Student;
 import ht.util.MonthTableSelectionListener;
@@ -41,6 +42,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
@@ -145,8 +148,17 @@ public class MainFrame extends JFrame {
 	private JTable jTableNovember;
 	private JTable jTableOctober;
 	private JTable jTableSeptember;
-	private JPanel jPanelDay;
+	private JPanel jPanelFieldTrip;
+	private JLabel jLabelFieldTripDescription;
+	private JLabel jLabelFieldTripLocation;
+	private JTextField jTextFieldFieldTripDescription;
+	private JTextField jTextFieldFieldTripLocation;
 
+	private JPanel jPanelFieldTripNotes;
+
+	private JTextPane jTextPaneFieldTripNotes;
+
+	private JScrollPane jScrollPaneFieldTripNotes;
 	/**
 	 * Defines a new frame.
 	 */
@@ -686,10 +698,11 @@ public class MainFrame extends JFrame {
 	private JPanel getJPanelDayDetails() {
 		if (jPanelDayDetails == null) {
 			jPanelDayDetails = new JPanel();
-			jPanelDayDetails.setBorder(BorderFactory.createTitledBorder(null, "Details for ", TitledBorder.LEADING,
-					TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
+			jPanelDayDetails.setBorder(BorderFactory.createTitledBorder(null, "Details for ", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font(
+					"Dialog", Font.BOLD, 12), new Color(51, 51, 51)));
 			jPanelDayDetails.setLayout(new GroupLayout());
 			jPanelDayDetails.add(getJPanelDayCheckBoxes(), new Constraints(new Bilateral(12, 12, 0), new Leading(0, 33, 10, 10)));
+			jPanelDayDetails.add(getJPanelFieldTrip(), new Constraints(new Bilateral(0, 1, 122), new Bilateral(39, 0, 182)));
 		}
 		return jPanelDayDetails;
 	}
@@ -746,8 +759,7 @@ public class MainFrame extends JFrame {
 			jPanelYear.add(getJPanelYearPicker(), new Constraints(new Leading(12, 616, 12, 12), new Leading(0, 44, 12, 12)));
 			jPanelYear.add(getJPanelDayDetails(), new Constraints(new Bilateral(633, 12, 0), new Bilateral(12, 12, 0)));
 			jPanelYear.addComponentListener(new ComponentAdapter() {
-
-				@Override
+	
 				public void componentShown(ComponentEvent event) {
 					jPanelYearComponentComponentShown(event);
 				}
@@ -922,7 +934,6 @@ public class MainFrame extends JFrame {
 			jTabbedPaneTabs = new JTabbedPane();
 			jTabbedPaneTabs.addTab("Students", getJPanelStudents());
 			jTabbedPaneTabs.addTab("Year", getJPanelYear());
-			jTabbedPaneTabs.addTab("Day", getJPanelDay());
 		}
 		return jTabbedPaneTabs;
 	}
@@ -1210,15 +1221,78 @@ public class MainFrame extends JFrame {
 		add(getJTabbedPaneTabs(), BorderLayout.CENTER);
 		setJMenuBar(getJMenuBarMain());
 		initButtonGroupAttendance();
-		pack();
+		setSize(983, 668);
 	}
 
-	private JPanel getJPanelDay() {
-		if (jPanelDay == null) {
-			jPanelDay = new JPanel();
-			jPanelDay.setLayout(new GroupLayout());
+	private JScrollPane getJScrollPaneFieldTripNotes() {
+		if (jScrollPaneFieldTripNotes == null) {
+			jScrollPaneFieldTripNotes = new JScrollPane();
+			jScrollPaneFieldTripNotes.setViewportView(getJTextPaneFieldTripNotes());
 		}
-		return jPanelDay;
+		return jScrollPaneFieldTripNotes;
+	}
+
+	private JTextPane getJTextPaneFieldTripNotes() {
+		if (jTextPaneFieldTripNotes == null) {
+			jTextPaneFieldTripNotes = new JTextPane();
+		}
+		return jTextPaneFieldTripNotes;
+	}
+
+	private JPanel getJPanelFieldTripNotes() {
+		if (jPanelFieldTripNotes == null) {
+			jPanelFieldTripNotes = new JPanel();
+			jPanelFieldTripNotes.setBorder(BorderFactory.createTitledBorder(null, "Notes", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
+			jPanelFieldTripNotes.setLayout(new GroupLayout());
+			jPanelFieldTripNotes.add(getJScrollPaneFieldTripNotes(), new Constraints(new Bilateral(0, 0, 22), new Bilateral(0, 0, 22)));
+		}
+		return jPanelFieldTripNotes;
+	}
+
+	private JTextField getJTextFieldFieldTripLocation() {
+		if (jTextFieldFieldTripLocation == null) {
+			jTextFieldFieldTripLocation = new JTextField();
+		}
+		return jTextFieldFieldTripLocation;
+	}
+
+	private JTextField getJTextFieldFieldTripDescription() {
+		if (jTextFieldFieldTripDescription == null) {
+			jTextFieldFieldTripDescription = new JTextField();
+		}
+		return jTextFieldFieldTripDescription;
+	}
+
+	private JLabel getJLabelFieldTripLocation() {
+		if (jLabelFieldTripLocation == null) {
+			jLabelFieldTripLocation = new JLabel();
+			jLabelFieldTripLocation.setText("Location");
+		}
+		return jLabelFieldTripLocation;
+	}
+
+	private JLabel getJLabelFieldTripDescription() {
+		if (jLabelFieldTripDescription == null) {
+			jLabelFieldTripDescription = new JLabel();
+			jLabelFieldTripDescription.setText("Description");
+		}
+		return jLabelFieldTripDescription;
+	}
+
+	private JPanel getJPanelFieldTrip() {
+		if (jPanelFieldTrip == null) {
+			jPanelFieldTrip = new JPanel();
+			jPanelFieldTrip.setBorder(BorderFactory.createTitledBorder(null, "Field Trip", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new Font("Dialog",
+					Font.BOLD, 12), new Color(51, 51, 51)));
+			jPanelFieldTrip.setLayout(new GroupLayout());
+			jPanelFieldTrip.add(getJLabelFieldTripDescription(), new Constraints(new Leading(12, 12, 12), new Leading(0, 12, 12)));
+			jPanelFieldTrip.add(getJLabelFieldTripLocation(), new Constraints(new Leading(12, 12, 12), new Leading(22, 12, 12)));
+			jPanelFieldTrip.add(getJTextFieldFieldTripDescription(), new Constraints(new Bilateral(89, 0, 4), new Leading(-2, 59, 379)));
+			jPanelFieldTrip.add(getJTextFieldFieldTripLocation(), new Constraints(new Bilateral(89, 1, 4), new Leading(20, 59, 379)));
+			jPanelFieldTrip.add(getJPanelFieldTripNotes(), new Constraints(new Bilateral(0, 0, 0), new Bilateral(44, 0, 0)));
+		}
+		return jPanelFieldTrip;
 	}
 
 	/**
@@ -1425,10 +1499,18 @@ public class MainFrame extends JFrame {
 	private void loadDay(Calendar cal) {
 		if (getSelectedDay() != null) {
 			Day.save(getSelectedDay());
+			if (!getJTextFieldFieldTripDescription().getText().isEmpty()) {
+				FieldTrip trip = new FieldTrip(getJTextFieldFieldTripDescription().getText().trim(),
+						getJTextFieldFieldTripLocation().getText().trim(),
+						getJTextPaneFieldTripNotes().getText(),
+						getSelectedDay());
+				FieldTrip.save(trip);
+			}
 		}
 
 		clearAllTableSelections(cal.get(Calendar.MONTH) + 1);
 
+		// load day details
 		setSelectedDay(Day.get(cal.getTime()));
 		((TitledBorder) getJPanelDayDetails().getBorder()).setTitle("Details for " + dateFormat.format(getSelectedDay().getDate()));
 		getJRadioButtonHadSchool().setSelected(getSelectedDay().hadSchool());
@@ -1437,6 +1519,18 @@ public class MainFrame extends JFrame {
 		getJRadioButtonVacation().setSelected(getSelectedDay().isVacationDay());
 		if (!getSelectedDay().isCoopDay() && !getSelectedDay().isSickDay() && !getSelectedDay().isVacationDay()) {
 			buttonGroupAttendance.clearSelection();
+		}
+		
+		// load field trip details
+		FieldTrip trip = FieldTrip.get(getSelectedDay().getDate());
+		if (trip != null) {
+			getJTextFieldFieldTripDescription().setText(trip.getWhat());
+			getJTextFieldFieldTripLocation().setText(trip.getLocation());
+			getJTextPaneFieldTripNotes().setText(trip.getNotes());
+		} else {
+			getJTextFieldFieldTripDescription().setText("");
+			getJTextFieldFieldTripLocation().setText("");
+			getJTextPaneFieldTripNotes().setText("");
 		}
 		getJPanelDayDetails().repaint();
 	}

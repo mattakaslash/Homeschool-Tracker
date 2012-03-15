@@ -5,7 +5,6 @@ package ht.model;
 
 import ht.util.SchoolYear;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
