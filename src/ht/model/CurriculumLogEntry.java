@@ -3,14 +3,19 @@
  */
 package ht.model;
 
+import ht.HomeschoolTracker;
+
 import java.net.URL;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.Query;
 
 /**
  * Models an entry in the curriculum materials log.
@@ -20,23 +25,63 @@ import javax.persistence.Lob;
  */
 @Entity
 public class CurriculumLogEntry {
+	/**
+	 * Returns a particular entry by line number.
+	 * 
+	 * @param index
+	 *            the index
+	 * @return the entry
+	 */
+	public static CurriculumLogEntry get(int index) {
+		return (CurriculumLogEntry) getAll().toArray()[index];
+	}
+
+	/**
+	 * Returns a list of all curriculum log entries, sorted by title.
+	 * 
+	 * @return the list
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<CurriculumLogEntry> getAll() {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		Query q = em.createQuery("SELECT l FROM CurriculumLogEntry l ORDER BY l._title");
+		List<CurriculumLogEntry> result = q.getResultList();
+		em.close();
+
+		return result;
+	}
+
+	/**
+	 * Saves the given entry to the database.
+	 * 
+	 * @param entry
+	 *            the entry
+	 */
+	public static void save(CurriculumLogEntry entry) {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		em.getTransaction().begin();
+		em.merge(entry);
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	@Column(name = "AUTHOR")
+	private String _author;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long _id;
-	
-	@Column(name = "TITLE")
-	private String _title;
-	
-	@Column(name = "AUTHOR")
-	private String _author;
-	
-	@Column(name = "URL")
-	private URL _url;
-	
+
 	@Lob
 	@Column(name = "NOTES")
 	private String _notes;
+
+	@Column(name = "TITLE")
+	private String _title;
+
+	@Column(name = "URL")
+	private URL _url;
 
 	/**
 	 * Creates a default, empty log entry.
@@ -49,10 +94,46 @@ public class CurriculumLogEntry {
 	}
 
 	/**
+	 * @return the author
+	 */
+	public String getAuthor() {
+		return _author;
+	}
+
+	/**
 	 * @return the id
 	 */
 	private Long getId() {
 		return _id;
+	}
+
+	/**
+	 * @return the notes
+	 */
+	public String getNotes() {
+		return _notes;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return _title;
+	}
+
+	/**
+	 * @return the url
+	 */
+	public URL getURL() {
+		return _url;
+	}
+
+	/**
+	 * @param author
+	 *            the author to set
+	 */
+	public void setAuthor(String author) {
+		_author = author;
 	}
 
 	/**
@@ -64,63 +145,26 @@ public class CurriculumLogEntry {
 	}
 
 	/**
-	 * @return the title
+	 * @param notes
+	 *            the notes to set
 	 */
-	private String getTitle() {
-		return _title;
+	public void setNotes(String notes) {
+		_notes = notes;
 	}
 
 	/**
 	 * @param title
 	 *            the title to set
 	 */
-	private void setTitle(String title) {
+	public void setTitle(String title) {
 		_title = title;
-	}
-
-	/**
-	 * @return the author
-	 */
-	private String getAuthor() {
-		return _author;
-	}
-
-	/**
-	 * @param author
-	 *            the author to set
-	 */
-	private void setAuthor(String author) {
-		_author = author;
-	}
-
-	/**
-	 * @return the url
-	 */
-	private URL getURL() {
-		return _url;
 	}
 
 	/**
 	 * @param url
 	 *            the url to set
 	 */
-	private void setURL(URL url) {
+	public void setURL(URL url) {
 		_url = url;
 	}
-
-	/**
-	 * @return the notes
-	 */
-	private String getNotes() {
-		return _notes;
-	}
-
-	/**
-	 * @param notes
-	 *            the notes to set
-	 */
-	private void setNotes(String notes) {
-		_notes = notes;
-	}
-
 }

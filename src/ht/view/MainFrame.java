@@ -3,6 +3,7 @@ package ht.view;
 import ht.model.Day;
 import ht.model.FieldTrip;
 import ht.model.Student;
+import ht.model.swing.CurriculumDataModel;
 import ht.model.swing.MonthTableModel;
 import ht.util.MonthTableSelectionListener;
 import ht.util.SchoolYear;
@@ -48,6 +49,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
@@ -87,6 +89,11 @@ public class MainFrame extends JFrame {
 	 * Stores the currently selected year from the year tab.
 	 */
 	private Integer _selectedYear = SchoolYear.getStart().get(Calendar.YEAR);
+	
+	/**
+	 * Stores the data model for the curriculum log table.
+	 */
+	private static final TableModel curriculumDataModel = new CurriculumDataModel();
 
 	private ButtonGroup buttonGroupAttendance;
 	private JButton jButtonNextYear;
@@ -153,18 +160,20 @@ public class MainFrame extends JFrame {
 	private JLabel jLabelFieldTripLocation;
 	private JTextField jTextFieldFieldTripDescription;
 	private JTextField jTextFieldFieldTripLocation;
-
 	private JPanel jPanelFieldTripNotes;
-
 	private JTextPane jTextPaneFieldTripNotes;
-
 	private JScrollPane jScrollPaneFieldTripNotes;
-
 	private JPanel jPanelCurriculum;
-
 	private JTable jTableCurriculum;
-
 	private JScrollPane jScrollPaneCurriculum;
+	private JPanel jPanelCurriculumControls;
+
+	private JButton jButton0;
+
+	private JButton jButton1;
+
+	private JButton jButton2;
+	
 	/**
 	 * Defines a new frame.
 	 */
@@ -1231,6 +1240,30 @@ public class MainFrame extends JFrame {
 		setSize(983, 668);
 	}
 
+	private JButton getJButton2() {
+		if (jButton2 == null) {
+			jButton2 = new JButton();
+			jButton2.setText("Delete");
+		}
+		return jButton2;
+	}
+
+	private JButton getJButton1() {
+		if (jButton1 == null) {
+			jButton1 = new JButton();
+			jButton1.setText("Save");
+		}
+		return jButton1;
+	}
+
+	private JButton getJButton0() {
+		if (jButton0 == null) {
+			jButton0 = new JButton();
+			jButton0.setText("Add");
+		}
+		return jButton0;
+	}
+
 	private JScrollPane getJScrollPaneCurriculum() {
 		if (jScrollPaneCurriculum == null) {
 			jScrollPaneCurriculum = new JScrollPane();
@@ -1252,8 +1285,25 @@ public class MainFrame extends JFrame {
 			jPanelCurriculum = new JPanel();
 			jPanelCurriculum.setLayout(new BorderLayout());
 			jPanelCurriculum.add(getJScrollPaneCurriculum(), BorderLayout.CENTER);
+			jPanelCurriculum.add(getJPanelCurriculumControls(), BorderLayout.SOUTH);
+			jPanelCurriculum.addComponentListener(new ComponentAdapter() {
+	
+				public void componentShown(ComponentEvent event) {
+					jPanelCurriculumComponentComponentShown(event);
+				}
+			});
 		}
 		return jPanelCurriculum;
+	}
+
+	private JPanel getJPanelCurriculumControls() {
+		if (jPanelCurriculumControls == null) {
+			jPanelCurriculumControls = new JPanel();
+			jPanelCurriculumControls.add(getJButton0());
+			jPanelCurriculumControls.add(getJButton1());
+			jPanelCurriculumControls.add(getJButton2());
+		}
+		return jPanelCurriculumControls;
 	}
 
 	private JScrollPane getJScrollPaneFieldTripNotes() {
@@ -1621,5 +1671,13 @@ public class MainFrame extends JFrame {
 	 */
 	public void setSelectedYear(Integer selectedYear) {
 		_selectedYear = selectedYear;
+	}
+
+	/**
+	 * Event: Curriculum tab shown.
+	 * @param event
+	 */
+	private void jPanelCurriculumComponentComponentShown(ComponentEvent event) {
+//		getJTableCurriculum().setModel(curriculumDataModel);
 	}
 }
