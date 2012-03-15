@@ -164,7 +164,7 @@ public class MainFrame extends JFrame {
 
 	private JTable jTableCurriculum;
 
-	private JScrollPane jScrollPane0;
+	private JScrollPane jScrollPaneCurriculum;
 	/**
 	 * Defines a new frame.
 	 */
@@ -1231,12 +1231,12 @@ public class MainFrame extends JFrame {
 		setSize(983, 668);
 	}
 
-	private JScrollPane getJScrollPane0() {
-		if (jScrollPane0 == null) {
-			jScrollPane0 = new JScrollPane();
-			jScrollPane0.setViewportView(getJTableCurriculum());
+	private JScrollPane getJScrollPaneCurriculum() {
+		if (jScrollPaneCurriculum == null) {
+			jScrollPaneCurriculum = new JScrollPane();
+			jScrollPaneCurriculum.setViewportView(getJTableCurriculum());
 		}
-		return jScrollPane0;
+		return jScrollPaneCurriculum;
 	}
 
 	private JTable getJTableCurriculum() {
@@ -1251,7 +1251,7 @@ public class MainFrame extends JFrame {
 		if (jPanelCurriculum == null) {
 			jPanelCurriculum = new JPanel();
 			jPanelCurriculum.setLayout(new BorderLayout());
-			jPanelCurriculum.add(getJScrollPane0(), BorderLayout.CENTER);
+			jPanelCurriculum.add(getJScrollPaneCurriculum(), BorderLayout.CENTER);
 		}
 		return jPanelCurriculum;
 	}
