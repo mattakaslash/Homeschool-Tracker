@@ -37,6 +37,15 @@ public class InitFrame extends JDialog {
 	private static final long serialVersionUID = 4711432712290749464L;
 
 	class Task extends SwingWorker<Void, Void> {
+		private String _command;
+		
+		public String getCommand() {
+			return _command;
+		}
+		
+		private void setCommand(String cmd) {
+			_command = cmd;
+		}
 
 		@Override
 		protected Void doInBackground() throws Exception {
@@ -58,6 +67,7 @@ public class InitFrame extends JDialog {
 
 			for (String cmd : commands) {
 				s.executeUpdate(cmd);
+				setCommand(cmd.substring(0, cmd.indexOf(' ', cmd.indexOf(' ') + 1)));
 				setProgress(getProgress() + 1);
 			}
 
@@ -116,8 +126,12 @@ public class InitFrame extends JDialog {
 	private void taskPropertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().contentEquals("progress")) {
 			int progress = (Integer) evt.getNewValue();
-			getJProgressBarInit().setString("Step " + progress + " of " + getJProgressBarInit().getMaximum());
+			getJProgressBarInit()
+					.setString(
+							"Step " + progress + " of " + getJProgressBarInit().getMaximum() + " ("
+									+ ((Task) evt.getSource()).getCommand() + ")");
 			getJProgressBarInit().setValue(progress);
+			pack();
 		}
 	}
 }
