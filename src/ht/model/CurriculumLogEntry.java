@@ -26,6 +26,13 @@ import javax.persistence.Query;
 @Entity
 public class CurriculumLogEntry {
 	/**
+	 * Adds a new, blank log entry to the database.
+	 */
+	public static void add() {
+		save(new CurriculumLogEntry());
+	}
+
+	/**
 	 * Returns a particular entry by line number.
 	 * 
 	 * @param index
