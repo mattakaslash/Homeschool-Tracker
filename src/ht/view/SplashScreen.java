@@ -39,6 +39,7 @@ public class SplashScreen extends JDialog {
 		setFont(new Font("Dialog", Font.PLAIN, 12));
 		setBackground(new Color(223, 223, 223));
 		setForeground(Color.black);
+		setUndecorated(true);
 		add(getJProgressBarActivity(), BorderLayout.SOUTH);
 		add(getJPanelImage(), BorderLayout.CENTER);
 		setSize(320, 240);
