@@ -5,6 +5,7 @@ package ht.view;
 
 import ht.HomeschoolTracker;
 import ht.model.ConfigurationEntry;
+import ht.model.Subject;
 
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
@@ -31,21 +32,8 @@ import javax.swing.SwingWorker;
  * @since 1.0
  */
 public class InitFrame extends JDialog {
-	/**
-	 * Generated.
-	 */
-	private static final long serialVersionUID = 4711432712290749464L;
-
 	class Task extends SwingWorker<Void, Void> {
 		private String _command;
-		
-		public String getCommand() {
-			return _command;
-		}
-		
-		private void setCommand(String cmd) {
-			_command = cmd;
-		}
 
 		@Override
 		protected Void doInBackground() throws Exception {
@@ -71,9 +59,12 @@ public class InitFrame extends JDialog {
 				setProgress(getProgress() + 1);
 			}
 
+			Subject root = new Subject("");
 			em.getTransaction().begin();
 			em.persist(new ConfigurationEntry("VERSION", "1.0"));
+			em.persist(root);
 			em.getTransaction().commit();
+			setCommand("INSERT ENTITIES");
 			setProgress(getProgress() + 1);
 
 			conn.close();
@@ -86,26 +77,22 @@ public class InitFrame extends JDialog {
 			dispose();
 		}
 
+		public String getCommand() {
+			return _command;
+		}
+
+		private void setCommand(String cmd) {
+			_command = cmd;
+		}
+
 	}
+
+	/**
+	 * Generated.
+	 */
+	private static final long serialVersionUID = 4711432712290749464L;
 
 	private JProgressBar jProgressBarInit;
-
-	private void initComponents() {
-		setTitle("Initializing Database");
-		add(getJProgressBarInit(), BorderLayout.CENTER);
-		setModal(true);
-		pack();
-	}
-
-	private JProgressBar getJProgressBarInit() {
-		if (jProgressBarInit == null) {
-			jProgressBarInit = new JProgressBar();
-			jProgressBarInit.setMinimum(0);
-			jProgressBarInit.setStringPainted(true);
-			jProgressBarInit.setString("");
-		}
-		return jProgressBarInit;
-	}
 
 	/**
 	 * Creates the frame.
@@ -123,13 +110,29 @@ public class InitFrame extends JDialog {
 		t.execute();
 	}
 
+	private JProgressBar getJProgressBarInit() {
+		if (jProgressBarInit == null) {
+			jProgressBarInit = new JProgressBar();
+			jProgressBarInit.setMinimum(0);
+			jProgressBarInit.setStringPainted(true);
+			jProgressBarInit.setString("");
+		}
+		return jProgressBarInit;
+	}
+
+	private void initComponents() {
+		setTitle("Initializing Database");
+		add(getJProgressBarInit(), BorderLayout.CENTER);
+		setModal(true);
+		pack();
+	}
+
 	private void taskPropertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().contentEquals("progress")) {
 			int progress = (Integer) evt.getNewValue();
-			getJProgressBarInit()
-					.setString(
-							"Step " + progress + " of " + getJProgressBarInit().getMaximum() + " ("
-									+ ((Task) evt.getSource()).getCommand() + ")");
+			getJProgressBarInit().setString(
+					"Step " + progress + " of " + getJProgressBarInit().getMaximum() + " (" + ((Task) evt.getSource()).getCommand()
+							+ ")");
 			getJProgressBarInit().setValue(progress);
 			pack();
 		}

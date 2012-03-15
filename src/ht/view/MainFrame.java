@@ -133,6 +133,8 @@ public class MainFrame extends JFrame {
 	private JMenuBar jMenuBarMain;
 	private JMenu jMenuFile;
 	private JMenuItem jMenuItemFileExit;
+	private JMenuItem jMenuItemOptionsConfigureSubjects;
+	private JMenu jMenuOptions;
 	private JPanel jPanelCurriculum;
 	private JPanel jPanelCurriculumControls;
 	private JPanel jPanelDayCheckBoxes;
@@ -179,7 +181,9 @@ public class MainFrame extends JFrame {
 	private JTable jTableReadingList;
 	private JTable jTableSeptember;
 	private JTextField jTextFieldFieldTripDescription;
+
 	private JTextField jTextFieldFieldTripLocation;
+
 	private JTextPane jTextPaneFieldTripNotes;
 
 	/**
@@ -751,10 +755,21 @@ public class MainFrame extends JFrame {
 		return jListStudentList;
 	}
 
+	private JMenu getJMenu0() {
+		if (jMenuOptions == null) {
+			jMenuOptions = new JMenu();
+			jMenuOptions.setText("Options");
+			jMenuOptions.setOpaque(false);
+			jMenuOptions.add(getJMenuItem0());
+		}
+		return jMenuOptions;
+	}
+
 	private JMenuBar getJMenuBarMain() {
 		if (jMenuBarMain == null) {
 			jMenuBarMain = new JMenuBar();
 			jMenuBarMain.add(getJMenuFile());
+			jMenuBarMain.add(getJMenu0());
 		}
 		return jMenuBarMain;
 	}
@@ -767,6 +782,21 @@ public class MainFrame extends JFrame {
 			jMenuFile.add(getJMenuItemFileExit());
 		}
 		return jMenuFile;
+	}
+
+	private JMenuItem getJMenuItem0() {
+		if (jMenuItemOptionsConfigureSubjects == null) {
+			jMenuItemOptionsConfigureSubjects = new JMenuItem();
+			jMenuItemOptionsConfigureSubjects.setText("Configure Subjects");
+			jMenuItemOptionsConfigureSubjects.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					jMenuItemOptionsConfigureSubjectsActionActionPerformed(event);
+				}
+			});
+		}
+		return jMenuItemOptionsConfigureSubjects;
 	}
 
 	private JMenuItem getJMenuItemFileExit() {
@@ -1648,6 +1678,16 @@ public class MainFrame extends JFrame {
 	 */
 	private void jMenuItemFileExitActionActionPerformed(ActionEvent event) {
 		this.dispose();
+	}
+
+	/**
+	 * Event: Options -> Configure Subjects
+	 * 
+	 * @param event
+	 */
+	private void jMenuItemOptionsConfigureSubjectsActionActionPerformed(ActionEvent event) {
+		SubjectManager sm = new SubjectManager(this);
+		sm.setVisible(true);
 	}
 
 	/**

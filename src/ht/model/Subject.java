@@ -3,13 +3,19 @@
  */
 package ht.model;
 
+import java.util.List;
+
+import ht.HomeschoolTracker;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Query;
 
 /**
  * Models a classroom subject in a hierarchical model.
@@ -19,17 +25,75 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class Subject {
+	/**
+	 * Returns the requested child subject in the sorted by title list of child
+	 * subjects.
+	 * 
+	 * @param parent
+	 *            the parent subject
+	 * @param index
+	 *            the index
+	 * @return the child subject
+	 */
+	public static Subject get(Subject parent, int index) {
+		if (parent == null) {
+			EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+			Query q = em.createQuery("SELECT s FROM Subject s WHERE s._id = :id");
+			q.setParameter("id", 1);
+			Subject result = (Subject) q.getSingleResult();
+
+			em.close();
+			return result;
+		} else {
+			return getAll(parent).get(index);
+		}
+	}
+
+	/**
+	 * Returns a list of all child subjects for the given parent.
+	 * 
+	 * @param parent
+	 *            the parent subject
+	 * @return the list
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Subject> getAll(Subject parent) {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		Query q = em.createQuery("SELECT s FROM Subject s JOIN s._parent p WHERE p._id = :id");
+		if (parent == null) {
+			q.setParameter("id", null);
+		} else {
+			q.setParameter("id", parent.getId());
+		}
+		List<Subject> results = q.getResultList();
+
+		em.close();
+		return results;
+	}
+
+	/**
+	 * Returns the root of all subjects.
+	 * 
+	 * @return the root
+	 */
+	public static Subject getRoot() {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		Query q = em.createQuery("SELECT s FROM Subject s WHERE s._parent._id is null");
+		Subject result = (Subject) q.getSingleResult();
+		return result;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long _id;
-	
-	@Column(name = "TITLE")
-	private String _title;
-	
+
 	@JoinColumn(name = "PARENT_ID")
 	@ManyToOne
 	private Subject _parent;
+
+	@Column(name = "TITLE")
+	private String _title;
 
 	/**
 	 * Creates a default Subject with no title and no parent.
@@ -40,10 +104,48 @@ public class Subject {
 	}
 
 	/**
+	 * Creates a new subject with the given title and no parent.
+	 * 
+	 * @param title
+	 *            the title
+	 */
+	public Subject(String title) {
+		setTitle(title);
+		setParent(null);
+	}
+
+	/**
+	 * Creates a new subject with the given title and parent.
+	 * 
+	 * @param title
+	 *            the title
+	 * @param parent
+	 *            the parent
+	 */
+	public Subject(String title, Subject parent) {
+		setTitle(title);
+		setParent(parent);
+	}
+
+	/**
 	 * @return the id
 	 */
 	private Long getId() {
 		return _id;
+	}
+
+	/**
+	 * @return the parent
+	 */
+	private Subject getParent() {
+		return _parent;
+	}
+
+	/**
+	 * @return the title
+	 */
+	private String getTitle() {
+		return _title;
 	}
 
 	/**
@@ -55,10 +157,11 @@ public class Subject {
 	}
 
 	/**
-	 * @return the title
+	 * @param parent
+	 *            the parent to set
 	 */
-	private String getTitle() {
-		return _title;
+	private void setParent(Subject parent) {
+		_parent = parent;
 	}
 
 	/**
@@ -69,18 +172,13 @@ public class Subject {
 		_title = title;
 	}
 
-	/**
-	 * @return the parent
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
 	 */
-	private Subject getParent() {
-		return _parent;
-	}
-
-	/**
-	 * @param parent
-	 *            the parent to set
-	 */
-	private void setParent(Subject parent) {
-		_parent = parent;
+	@Override
+	public String toString() {
+		return getTitle();
 	}
 }
