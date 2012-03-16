@@ -59,7 +59,7 @@ public class InitFrame extends JDialog {
 				setProgress(getProgress() + 1);
 			}
 
-			Subject root = new Subject("");
+			Subject root = new Subject("Subjects");
 			em.getTransaction().begin();
 			em.persist(new ConfigurationEntry("VERSION", "1.0"));
 			em.persist(root);
