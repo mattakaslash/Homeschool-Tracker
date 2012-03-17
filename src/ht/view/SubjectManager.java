@@ -1,23 +1,34 @@
 package ht.view;
 
+import ht.model.Subject;
 import ht.model.swing.SubjectsTreeModel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 /**
  * Provides an interface for managing the system's hierarchy of subjects.
@@ -31,12 +42,15 @@ public class SubjectManager extends JDialog {
 	 * Generated.
 	 */
 	private static final long serialVersionUID = -2470705175032575109L;
-	private JTree jTreeSubjects;
-	private JScrollPane jScrollPaneSubjects;
-	private JPanel jPanelControls;
 	private static final TreeModel subjectsTreeModel = new SubjectsTreeModel();
+	private JButton jButtonSave;
+	private JMenuItem jMenuItemSubjectsDelete;
+	private JMenuItem jMenuItemSubjectsNew;
+	private JPanel jPanelControls;
+	private JPopupMenu jPopupMenuSubjects;
+	private JScrollPane jScrollPaneSubjects;
 	private JTextField jTextFieldSubjectTitle;
-	private JButton jButtonSaveAll;
+	private JTree jTreeSubjects;
 
 	/**
 	 * Creates a default, parent-less dialog.
@@ -53,6 +67,108 @@ public class SubjectManager extends JDialog {
 		super(parent);
 		initComponents();
 		setLocationRelativeTo(parent);
+	}
+
+	private JButton getJButtonSave() {
+		if (jButtonSave == null) {
+			jButtonSave = new JButton();
+			jButtonSave.setText("Save");
+			jButtonSave.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					jButtonSaveActionActionPerformed(event);
+				}
+			});
+		}
+		return jButtonSave;
+	}
+
+	private JMenuItem getJMenuItemSubjectsDelete() {
+		if (jMenuItemSubjectsDelete == null) {
+			jMenuItemSubjectsDelete = new JMenuItem();
+			jMenuItemSubjectsDelete.setText("Delete");
+			jMenuItemSubjectsDelete.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					jMenuItemSubjectsDeleteActionActionPerformed(event);
+				}
+			});
+		}
+		return jMenuItemSubjectsDelete;
+	}
+
+	private JMenuItem getJMenuItemSubjectsNew() {
+		if (jMenuItemSubjectsNew == null) {
+			jMenuItemSubjectsNew = new JMenuItem();
+			jMenuItemSubjectsNew.setText("New");
+			jMenuItemSubjectsNew.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					jMenuItemSubjectsNewActionActionPerformed(event);
+				}
+			});
+		}
+		return jMenuItemSubjectsNew;
+	}
+
+	private JPanel getJPanelControls() {
+		if (jPanelControls == null) {
+			jPanelControls = new JPanel();
+			jPanelControls.setLayout(new BorderLayout());
+			jPanelControls.add(getJTextFieldSubjectTitle(), BorderLayout.CENTER);
+			jPanelControls.add(getJButtonSave(), BorderLayout.EAST);
+		}
+		return jPanelControls;
+	}
+
+	private JPopupMenu getJPopupMenuSubjects() {
+		if (jPopupMenuSubjects == null) {
+			jPopupMenuSubjects = new JPopupMenu();
+			jPopupMenuSubjects.add(getJMenuItemSubjectsNew());
+			jPopupMenuSubjects.add(getJMenuItemSubjectsDelete());
+		}
+		return jPopupMenuSubjects;
+	}
+
+	private JScrollPane getJScrollPaneSubjects() {
+		if (jScrollPaneSubjects == null) {
+			jScrollPaneSubjects = new JScrollPane();
+			jScrollPaneSubjects.setViewportView(getJTreeSubjects());
+		}
+		return jScrollPaneSubjects;
+	}
+
+	private JTextField getJTextFieldSubjectTitle() {
+		if (jTextFieldSubjectTitle == null) {
+			jTextFieldSubjectTitle = new JTextField();
+		}
+		return jTextFieldSubjectTitle;
+	}
+
+	private JTree getJTreeSubjects() {
+		if (jTreeSubjects == null) {
+			jTreeSubjects = new JTree();
+			DefaultTreeModel treeModel = null;
+			{
+				DefaultMutableTreeNode node0 = new DefaultMutableTreeNode("Subjects");
+				treeModel = new DefaultTreeModel(node0);
+			}
+			jTreeSubjects.setModel(treeModel);
+			jTreeSubjects.setComponentPopupMenu(getJPopupMenuSubjects());
+			jTreeSubjects.addTreeSelectionListener(new TreeSelectionListener() {
+	
+				public void valueChanged(TreeSelectionEvent event) {
+					jTreeSubjectsTreeSelectionValueChanged(event);
+				}
+			});
+			jTreeSubjects.addKeyListener(new KeyAdapter() {
+	
+				public void keyPressed(KeyEvent event) {
+					jTreeSubjectsKeyKeyPressed(event);
+				}
+			});
+		}
+		return jTreeSubjects;
 	}
 
 	private void initComponents() {
@@ -72,52 +188,77 @@ public class SubjectManager extends JDialog {
 		setSize(480, 320);
 	}
 
-	private JButton getJButtonSaveAll() {
-		if (jButtonSaveAll == null) {
-			jButtonSaveAll = new JButton();
-			jButtonSaveAll.setText("Save All");
+	/**
+	 * Event: Save button pressed.
+	 * @param event
+	 */
+	private void jButtonSaveActionActionPerformed(ActionEvent event) {
+		if (getJTreeSubjects().getSelectionCount() > 0) {
+			Subject s = (Subject) getJTreeSubjects().getSelectionPath().getLastPathComponent();
+			s.setTitle(getJTextFieldSubjectTitle().getText().trim());
+			Subject.save(s);
+			getJTreeSubjects().repaint();
 		}
-		return jButtonSaveAll;
 	}
 
-	private JTextField getJTextFieldSubjectTitle() {
-		if (jTextFieldSubjectTitle == null) {
-			jTextFieldSubjectTitle = new JTextField();
-		}
-		return jTextFieldSubjectTitle;
+	/**
+	 * Event: Subjects menu, delete clicked.
+	 * @param event
+	 */
+	private void jMenuItemSubjectsDeleteActionActionPerformed(ActionEvent event) {
+		if (getJTreeSubjects().getSelectionCount() > 0) {
+			TreePath path = getJTreeSubjects().getSelectionPath();
+			if (((Subject) path.getLastPathComponent()).getId() != 1) {
+				// TODO: confirm
+				Subject.remove((Subject) path.getLastPathComponent());
+				getJTreeSubjects().repaint();
+			} else {
+				JOptionPane.showMessageDialog(this, "Root of subjects tree cannot be deleted.", "Invalid Action",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}		
 	}
 
-	private JPanel getJPanelControls() {
-		if (jPanelControls == null) {
-			jPanelControls = new JPanel();
-			jPanelControls.setLayout(new BorderLayout());
-			jPanelControls.add(getJTextFieldSubjectTitle(), BorderLayout.CENTER);
-			jPanelControls.add(getJButtonSaveAll(), BorderLayout.EAST);
+	/**
+	 * Event: Subjects menu, new clicked.
+	 * @param event
+	 */
+	private void jMenuItemSubjectsNewActionActionPerformed(ActionEvent event) {
+		if (getJTreeSubjects().getSelectionCount() > 0) {
+			TreePath path = getJTreeSubjects().getSelectionPath();
+			Subject.save(new Subject("new subject", (Subject) path.getLastPathComponent()));
+			getJTreeSubjects().repaint();
 		}
-		return jPanelControls;
 	}
 
-	private JScrollPane getJScrollPaneSubjects() {
-		if (jScrollPaneSubjects == null) {
-			jScrollPaneSubjects = new JScrollPane();
-			jScrollPaneSubjects.setViewportView(getJTreeSubjects());
+	private void jTreeSubjectsTreeSelectionValueChanged(TreeSelectionEvent event) {
+		if (getJTreeSubjects().getSelectionCount() > 0) {
+			getJTextFieldSubjectTitle().setEnabled(true);
+			getJTextFieldSubjectTitle()
+					.setText(((Subject) getJTreeSubjects().getSelectionPath().getLastPathComponent()).getTitle());
+		} else {
+			getJTextFieldSubjectTitle().setEnabled(false);
+			getJTextFieldSubjectTitle().setText("");
 		}
-		return jScrollPaneSubjects;
 	}
 
-	private JTree getJTreeSubjects() {
-		if (jTreeSubjects == null) {
-			jTreeSubjects = new JTree();
-			DefaultTreeModel treeModel = null;
-			DefaultMutableTreeNode node0 = new DefaultMutableTreeNode("Subjects");
-			treeModel = new DefaultTreeModel(node0);
-			jTreeSubjects.setModel(treeModel);
-		}
-		return jTreeSubjects;
-	}
-
+	/**
+	 * Event: Window opened.
+	 * @param event
+	 */
 	private void windowWindowOpened(WindowEvent event) {
 		getJTreeSubjects().setModel(subjectsTreeModel);
 		getJTreeSubjects().repaint();
+	}
+
+	/**
+	 * Event: Subjects, key pressed.
+	 * @param event
+	 */
+	private void jTreeSubjectsKeyKeyPressed(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_DELETE) {
+			jMenuItemSubjectsDeleteActionActionPerformed(null);
+			event.consume();
+		}
 	}
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import ht.HomeschoolTracker;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -83,6 +84,32 @@ public class Subject {
 		return result;
 	}
 
+	/**
+	 * Removes the given subject from the database.
+	 * 
+	 * @param subject the subject
+	 */
+	public static void remove(Subject subject) {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		Subject s = em.merge(subject);
+		em.getTransaction().begin();
+		em.remove(s);
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	/**
+	 * Saves the given subject to the database.
+	 * @param subject the subject
+	 */
+	public static void save(Subject subject) {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		em.getTransaction().begin();
+		em.merge(subject);
+		em.getTransaction().commit();
+		em.close();
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -130,21 +157,21 @@ public class Subject {
 	/**
 	 * @return the id
 	 */
-	private Long getId() {
+	public Long getId() {
 		return _id;
 	}
 
 	/**
 	 * @return the parent
 	 */
-	private Subject getParent() {
+	public Subject getParent() {
 		return _parent;
 	}
 
 	/**
 	 * @return the title
 	 */
-	private String getTitle() {
+	public String getTitle() {
 		return _title;
 	}
 
@@ -168,7 +195,7 @@ public class Subject {
 	 * @param title
 	 *            the title to set
 	 */
-	private void setTitle(String title) {
+	public void setTitle(String title) {
 		_title = title;
 	}
 
