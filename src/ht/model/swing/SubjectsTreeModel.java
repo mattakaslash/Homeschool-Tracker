@@ -8,6 +8,7 @@ import ht.model.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -120,5 +121,15 @@ public class SubjectsTreeModel implements TreeModel {
 	public void valueForPathChanged(TreePath path, Object newValue) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * Informs all listeners that the tree has changed.
+	 * @param treePath 
+	 */
+	public void treeChanged(TreePath treePath) {
+		for (TreeModelListener l : getListeners()) {
+			l.treeStructureChanged(new TreeModelEvent(this, treePath));
+		}
 	}
 }

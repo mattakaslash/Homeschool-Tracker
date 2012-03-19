@@ -29,6 +29,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  * Provides an interface for managing the system's hierarchy of subjects.
@@ -141,6 +142,12 @@ public class SubjectManager extends JDialog {
 	private JTextField getJTextFieldSubjectTitle() {
 		if (jTextFieldSubjectTitle == null) {
 			jTextFieldSubjectTitle = new JTextField();
+			jTextFieldSubjectTitle.addKeyListener(new KeyAdapter() {
+	
+				public void keyPressed(KeyEvent event) {
+					jTextFieldSubjectTitleKeyKeyPressed(event);
+				}
+			});
 		}
 		return jTextFieldSubjectTitle;
 	}
@@ -155,6 +162,7 @@ public class SubjectManager extends JDialog {
 			}
 			jTreeSubjects.setModel(treeModel);
 			jTreeSubjects.setComponentPopupMenu(getJPopupMenuSubjects());
+			jTreeSubjects.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 			jTreeSubjects.addTreeSelectionListener(new TreeSelectionListener() {
 	
 				public void valueChanged(TreeSelectionEvent event) {
@@ -194,10 +202,13 @@ public class SubjectManager extends JDialog {
 	 */
 	private void jButtonSaveActionActionPerformed(ActionEvent event) {
 		if (getJTreeSubjects().getSelectionCount() > 0) {
-			Subject s = (Subject) getJTreeSubjects().getSelectionPath().getLastPathComponent();
+			TreePath path = getJTreeSubjects().getSelectionPath();
+			Subject s = (Subject) path.getLastPathComponent();
 			s.setTitle(getJTextFieldSubjectTitle().getText().trim());
 			Subject.save(s);
-			getJTreeSubjects().repaint();
+			((SubjectsTreeModel) getJTreeSubjects().getModel()).treeChanged(path);
+			getJTreeSubjects().expandPath(path);
+			getJTreeSubjects().clearSelection();
 		}
 	}
 
@@ -211,7 +222,8 @@ public class SubjectManager extends JDialog {
 			if (((Subject) path.getLastPathComponent()).getId() != 1) {
 				// TODO: confirm
 				Subject.remove((Subject) path.getLastPathComponent());
-				getJTreeSubjects().repaint();
+				((SubjectsTreeModel) getJTreeSubjects().getModel()).treeChanged(path.getParentPath());
+				getJTreeSubjects().clearSelection();
 			} else {
 				JOptionPane.showMessageDialog(this, "Root of subjects tree cannot be deleted.", "Invalid Action",
 						JOptionPane.ERROR_MESSAGE);
@@ -227,7 +239,9 @@ public class SubjectManager extends JDialog {
 		if (getJTreeSubjects().getSelectionCount() > 0) {
 			TreePath path = getJTreeSubjects().getSelectionPath();
 			Subject.save(new Subject("new subject", (Subject) path.getLastPathComponent()));
-			getJTreeSubjects().repaint();
+			((SubjectsTreeModel) getJTreeSubjects().getModel()).treeChanged(path);
+			getJTreeSubjects().expandPath(path);
+			getJTreeSubjects().clearSelection();
 		}
 	}
 
@@ -248,7 +262,6 @@ public class SubjectManager extends JDialog {
 	 */
 	private void windowWindowOpened(WindowEvent event) {
 		getJTreeSubjects().setModel(subjectsTreeModel);
-		getJTreeSubjects().repaint();
 	}
 
 	/**
@@ -258,6 +271,17 @@ public class SubjectManager extends JDialog {
 	private void jTreeSubjectsKeyKeyPressed(KeyEvent event) {
 		if (event.getKeyCode() == KeyEvent.VK_DELETE) {
 			jMenuItemSubjectsDeleteActionActionPerformed(null);
+			event.consume();
+		}
+	}
+
+	/**
+	 * Event: Subject title text field, key pressed.
+	 * @param event
+	 */
+	private void jTextFieldSubjectTitleKeyKeyPressed(KeyEvent event) {
+		if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+			getJButtonSave().doClick();
 			event.consume();
 		}
 	}
