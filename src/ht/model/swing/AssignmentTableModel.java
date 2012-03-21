@@ -155,8 +155,13 @@ public class AssignmentTableModel implements TableModel {
 			value = Assignment.get(rowIndex, getStudent()).getPointsPossible();
 			break;
 		case 7:
-			Double percent = ((Double) getValueAt(rowIndex, 4)) / (Double) getValueAt(rowIndex, 5) * 100;
-			value = Double.valueOf(new DecimalFormat("#.##").format(percent)).toString() + "%";
+			if ((Integer) getValueAt(rowIndex, 6) != 0) {
+				Double percent = new Double((Integer) getValueAt(rowIndex, 5)) / new Double((Integer) getValueAt(rowIndex, 6))
+						* 100;
+				value = Double.valueOf(new DecimalFormat("#.##").format(percent)).toString() + "%";
+			} else {
+				value = "";
+			}
 			break;
 		}
 
@@ -174,9 +179,10 @@ public class AssignmentTableModel implements TableModel {
 		case 3:
 		case 4:
 		case 5:
+		case 6:
 			value = true;
 			break;
-		case 6:
+		case 7:
 			value = false;
 			break;
 		}
@@ -196,6 +202,7 @@ public class AssignmentTableModel implements TableModel {
 		switch(columnIndex) {
 		case 0:
 			a.setSubject((Subject) aValue);
+			break;
 		case 1:
 			a.setTitle((String) aValue);
 			break;
@@ -218,6 +225,11 @@ public class AssignmentTableModel implements TableModel {
 		
 		Assignment.save(a);
 		tableChanged(new TableModelEvent(this, rowIndex, rowIndex, columnIndex, TableModelEvent.UPDATE));
+		
+		// update percentage automatically
+		if (columnIndex == 5 || columnIndex == 6) {
+			tableChanged(new TableModelEvent(this, rowIndex, rowIndex, 7, TableModelEvent.UPDATE));
+		}
 	}
 	
 	/**

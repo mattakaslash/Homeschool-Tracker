@@ -11,6 +11,7 @@ import ht.model.swing.MonthTableModel;
 import ht.model.swing.ReadingListTableModel;
 import ht.util.MonthTableSelectionListener;
 import ht.util.SchoolYear;
+import ht.view.editor.SubjectCellEditor;
 import ht.view.render.MonthTableRenderer;
 import ht.view.render.StudentCellRenderer;
 
@@ -2002,7 +2003,7 @@ public class MainFrame extends JFrame {
 			int[] rows = getJTableAssignments().getSelectedRows();
 			StringBuilder titles = new StringBuilder();
 			for (int row : rows) {
-				titles.append((String) getJTableAssignments().getValueAt(row, 0));
+				titles.append((String) getJTableAssignments().getValueAt(row, 1));
 				titles.append('\n');
 			}
 
@@ -2021,6 +2022,7 @@ public class MainFrame extends JFrame {
 		if (getSelectedStudent() != null) {
 			assignmentTableModel.setStudent(getSelectedStudent());
 			getJTableAssignments().setModel(assignmentTableModel);
+			getJTableAssignments().getColumnModel().getColumn(0).setCellEditor(new SubjectCellEditor());
 			getJTableAssignments().repaint();
 		}
 	}
