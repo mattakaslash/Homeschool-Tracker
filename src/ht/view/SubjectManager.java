@@ -220,10 +220,19 @@ public class SubjectManager extends JDialog {
 		if (getJTreeSubjects().getSelectionCount() > 0) {
 			TreePath path = getJTreeSubjects().getSelectionPath();
 			if (((Subject) path.getLastPathComponent()).getId() != 1) {
-				// TODO: confirm
-				Subject.remove((Subject) path.getLastPathComponent());
-				((SubjectsTreeModel) getJTreeSubjects().getModel()).treeChanged(path.getParentPath());
-				getJTreeSubjects().clearSelection();
+				if (!getJTreeSubjects().getModel().isLeaf(path.getLastPathComponent())) {
+					JOptionPane.showMessageDialog(this,
+							"Only leaf subjects can be deleted. Delete all child subjects before deleting this one.",
+							"Invalid Action", JOptionPane.ERROR_MESSAGE);
+				} else {
+					int n = JOptionPane.showConfirmDialog(this, "Delete " + (Subject) path.getLastPathComponent() + "?",
+							"Delete subject?", JOptionPane.YES_NO_OPTION);
+					if (n == JOptionPane.YES_OPTION) {
+						Subject.remove((Subject) path.getLastPathComponent());
+						((SubjectsTreeModel) getJTreeSubjects().getModel()).treeChanged(path.getParentPath());
+						getJTreeSubjects().clearSelection();
+					}
+				}
 			} else {
 				JOptionPane.showMessageDialog(this, "Root of subjects tree cannot be deleted.", "Invalid Action",
 						JOptionPane.ERROR_MESSAGE);
