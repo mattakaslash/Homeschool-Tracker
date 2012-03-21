@@ -1,8 +1,11 @@
 package ht.view;
 
+import ht.model.Assignment;
 import ht.model.Day;
 import ht.model.FieldTrip;
+import ht.model.ReadingListEntry;
 import ht.model.Student;
+import ht.model.swing.AssignmentTableModel;
 import ht.model.swing.CurriculumTableModel;
 import ht.model.swing.MonthTableModel;
 import ht.model.swing.ReadingListTableModel;
@@ -13,6 +16,7 @@ import ht.view.render.StudentCellRenderer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,6 +51,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.RowSorter;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -65,7 +70,12 @@ import org.dyno.visual.swing.layouts.Trailing;
  * @since 1.0
  */
 // VS4E -- DO NOT REMOVE THIS LINE!
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame {	
+	/**
+	 * Stores the data model for the assignments table.
+	 */
+	private static final AssignmentTableModel assignmentTableModel = new AssignmentTableModel();
+	
 	/**
 	 * Stores the data model for the curriculum log table.
 	 */
@@ -185,6 +195,18 @@ public class MainFrame extends JFrame {
 	private JTextField jTextFieldFieldTripLocation;
 
 	private JTextPane jTextPaneFieldTripNotes;
+
+	private JPanel jPanelAssignments;
+
+	private JTable jTableAssignments;
+
+	private JScrollPane jScrollPaneAssignments;
+
+	private JPanel jPanelAssignmentsControls;
+
+	private JButton jButtonAssignmentsAdd;
+
+	private JButton jButtonAssignmentsDelete;
 
 	/**
 	 * Defines the application's main interface.
@@ -1174,6 +1196,7 @@ public class MainFrame extends JFrame {
 			jTabbedPaneTabs.addTab("Curriculum", getJPanelCurriculum());
 			jTabbedPaneTabs.addTab("Year", getJPanelYear());
 			jTabbedPaneTabs.addTab("Reading List", getJPanelReadingList());
+			jTabbedPaneTabs.addTab("Assignments", getJPanelAssignments());
 		}
 		return jTabbedPaneTabs;
 	}
@@ -1502,6 +1525,77 @@ public class MainFrame extends JFrame {
 		setSize(983, 668);
 	}
 
+	private JPanel getJPanelAssignmentsControls() {
+		if (jPanelAssignmentsControls == null) {
+			jPanelAssignmentsControls = new JPanel();
+			jPanelAssignmentsControls.setPreferredSize(new Dimension(100, 100));
+			jPanelAssignmentsControls.add(getJButtonAssignmentsAdd());
+			jPanelAssignmentsControls.add(getJButtonAssignmentsDelete());
+		}
+		return jPanelAssignmentsControls;
+	}
+
+	private JButton getJButtonAssignmentsDelete() {
+		if (jButtonAssignmentsDelete == null) {
+			jButtonAssignmentsDelete = new JButton();
+			jButtonAssignmentsDelete.setText("Delete");
+			jButtonAssignmentsDelete.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					jButtonAssignmentsDeleteActionActionPerformed(event);
+				}
+			});
+		}
+		return jButtonAssignmentsDelete;
+	}
+
+	private JButton getJButtonAssignmentsAdd() {
+		if (jButtonAssignmentsAdd == null) {
+			jButtonAssignmentsAdd = new JButton();
+			jButtonAssignmentsAdd.setText("Add");
+			jButtonAssignmentsAdd.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					jButtonAssignmentsAddActionActionPerformed(event);
+				}
+			});
+		}
+		return jButtonAssignmentsAdd;
+	}
+
+	private JPanel getJPanelAssignments() {
+		if (jPanelAssignments == null) {
+			jPanelAssignments = new JPanel();
+			jPanelAssignments.setLayout(new BorderLayout());
+			jPanelAssignments.add(getJPanelAssignmentsControls(), BorderLayout.SOUTH);
+			jPanelAssignments.add(getJScrollPaneAssignments(), BorderLayout.CENTER);
+			jPanelAssignments.addComponentListener(new ComponentAdapter() {
+	
+				public void componentShown(ComponentEvent event) {
+					jPanelAssignmentsComponentComponentShown(event);
+				}
+			});
+		}
+		return jPanelAssignments;
+	}
+
+	private JScrollPane getJScrollPaneAssignments() {
+		if (jScrollPaneAssignments == null) {
+			jScrollPaneAssignments = new JScrollPane();
+			jScrollPaneAssignments.setViewportView(getJTableAssignments());
+		}
+		return jScrollPaneAssignments;
+	}
+
+	private JTable getJTableAssignments() {
+		if (jTableAssignments == null) {
+			jTableAssignments = new JTable();
+			jTableAssignments.setModel(new DefaultTableModel(new Object[0][0], new String[] { "Subject", "Title", "Category",
+					"Date Assigned", "Date Completed", "Points Earned", "Points Possible", "Percentage" }));
+		}
+		return jTableAssignments;
+	}
+
 	/**
 	 * Event: Curriculum Add button pressed.
 	 * 
@@ -1558,12 +1652,13 @@ public class MainFrame extends JFrame {
 	}
 
 	private void jButtonReadingListAddActionActionPerformed(ActionEvent event) {
-		((ReadingListTableModel) getJTableReadingList().getModel()).add();
+		ReadingListEntry.save(new ReadingListEntry(getSelectedStudent()));
+		((ReadingListTableModel) getJTableReadingList().getModel()).tableChanged();
 	}
 
 	private void jButtonReadingListDeleteActionActionPerformed(ActionEvent event) {
 		if (getJTableReadingList().getSelectedRowCount() > 0) {
-			int[] rows = getJTableCurriculum().getSelectedRows();
+			int[] rows = getJTableReadingList().getSelectedRows();
 			StringBuilder titles = new StringBuilder();
 			for (int row : rows) {
 				titles.append((String) getJTableReadingList().getValueAt(row, 0));
@@ -1574,7 +1669,8 @@ public class MainFrame extends JFrame {
 					JOptionPane.YES_NO_OPTION);
 			if (n == JOptionPane.YES_OPTION) {
 				for (int x = rows.length - 1; x >= 0; x--) {
-					((ReadingListTableModel) getJTableReadingList().getModel()).delete(rows[x]);
+					ReadingListEntry.remove(rows[x], getSelectedStudent());
+					((ReadingListTableModel) getJTableReadingList().getModel()).tableChanged();
 				}
 			}
 		}
@@ -1894,5 +1990,39 @@ public class MainFrame extends JFrame {
 	private void setTabsEnabled(Boolean value) {
 		getJTabbedPaneTabs().setEnabledAt(2, value);
 		getJTabbedPaneTabs().setEnabledAt(3, value);
+		getJTabbedPaneTabs().setEnabledAt(4, value);
+	}
+
+	private void jButtonAssignmentsAddActionActionPerformed(ActionEvent event) {
+		Assignment.save(new Assignment(getSelectedStudent()));
+		((AssignmentTableModel) getJTableAssignments().getModel()).tableChanged();
+	}
+
+	private void jButtonAssignmentsDeleteActionActionPerformed(ActionEvent event) {
+		if (getJTableAssignments().getSelectedRowCount() > 0) {
+			int[] rows = getJTableAssignments().getSelectedRows();
+			StringBuilder titles = new StringBuilder();
+			for (int row : rows) {
+				titles.append((String) getJTableAssignments().getValueAt(row, 0));
+				titles.append('\n');
+			}
+
+			int n = JOptionPane.showConfirmDialog(this, "Delete the following assignments?\n\n" + titles.toString(),
+					"Are you sure?", JOptionPane.YES_NO_OPTION);
+			if (n == JOptionPane.YES_OPTION) {
+				for (int x = rows.length - 1; x >= 0; x--) {
+					Assignment.remove(rows[x], getSelectedStudent());
+					((AssignmentTableModel) getJTableAssignments().getModel()).tableChanged();
+				}
+			}
+		}
+	}
+
+	private void jPanelAssignmentsComponentComponentShown(ComponentEvent event) {
+		if (getSelectedStudent() != null) {
+			assignmentTableModel.setStudent(getSelectedStudent());
+			getJTableAssignments().setModel(assignmentTableModel);
+			getJTableAssignments().repaint();
+		}
 	}
 }

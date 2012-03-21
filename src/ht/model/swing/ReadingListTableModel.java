@@ -29,14 +29,6 @@ public class ReadingListTableModel implements TableModel {
 	 */
 	private Student _student;
 
-	/**
-	 * Adds a new blank entry to the reading list.
-	 */
-	public void add() {
-		ReadingListEntry.save(new ReadingListEntry(getStudent()));
-		tableChanged(new TableModelEvent(this));
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -47,17 +39,6 @@ public class ReadingListTableModel implements TableModel {
 	@Override
 	public void addTableModelListener(TableModelListener l) {
 		getListeners().add(l);
-	}
-
-	/**
-	 * Deletes the entity with the given index from the reading list.
-	 * 
-	 * @param row
-	 *            the index
-	 */
-	public void delete(int row) {
-		ReadingListEntry.remove(row, getStudent());
-		tableChanged(new TableModelEvent(this, row, row, TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
 	}
 
 	/*
@@ -249,6 +230,13 @@ public class ReadingListTableModel implements TableModel {
 		}
 
 		ReadingListEntry.save(entry);
+		tableChanged(new TableModelEvent(this));
+	}
+	
+	/**
+	 * Notifies all listeners that the table has changed.
+	 */
+	public void tableChanged() {
 		tableChanged(new TableModelEvent(this));
 	}
 
