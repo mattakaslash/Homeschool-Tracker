@@ -62,6 +62,7 @@ public class ReadingListEntry {
 	 * 
 	 * @param index
 	 *            the index
+	 * @param student the student
 	 */
 	public static void remove(int index, Student student) {
 		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
