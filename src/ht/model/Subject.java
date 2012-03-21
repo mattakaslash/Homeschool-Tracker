@@ -7,7 +7,6 @@ import java.util.List;
 
 import ht.HomeschoolTracker;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
