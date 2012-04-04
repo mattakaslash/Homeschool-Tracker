@@ -1918,7 +1918,7 @@ public class MainFrame extends JFrame {
 			getJTextFieldFieldTripLocation().setText("");
 			getJTextPaneFieldTripNotes().setText("");
 		}
-		getJPanelDayDetails().repaint();
+		getJPanelYear().repaint();
 	}
 
 	/**

@@ -5,6 +5,7 @@ package ht.model;
 
 import ht.HomeschoolTracker;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -23,6 +24,17 @@ import javax.persistence.TemporalType;
  */
 @Entity
 public class Day {
+	/**
+	 * Retrieves the requested day from the database and returns it.
+	 * 
+	 * @param cal
+	 *            the date
+	 * @return the day
+	 */
+	public static Day get(Calendar cal) {
+		return get(cal.getTime());
+	}
+
 	/**
 	 * Retrieves the requested day from the database and returns it.
 	 * 

@@ -3,10 +3,13 @@
  */
 package ht.view.render;
 
+import ht.model.Day;
+import ht.model.FieldTrip;
 import ht.model.swing.MonthTableModel;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.util.Calendar;
 
 import javax.swing.BorderFactory;
@@ -65,6 +68,9 @@ public class MonthTableRenderer extends JLabel implements TableCellRenderer {
 			int column) {
 		setHorizontalAlignment(SwingConstants.CENTER);
 		setOpaque(true);
+		setBackground(Color.WHITE);
+		setForeground(Color.BLACK);
+		setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
 			
 		if (value != null) {
 			Integer date = (Integer) value;
@@ -78,6 +84,27 @@ public class MonthTableRenderer extends JLabel implements TableCellRenderer {
 			} else {
 				setBorder(null);
 			}
+			
+			// format days based on attendance
+			Calendar cal = Calendar.getInstance();
+			cal.set(((MonthTableModel) table.getModel()).getYear(), ((MonthTableModel) table.getModel()).getMonth() - 1, date);
+			Day day = Day.get(cal);
+			
+			if (day.hadSchool()) {
+				setFont(new Font(getFont().getFontName(), Font.BOLD, getFont().getSize()));
+			}
+			if (day.isCoopDay()) {
+				setForeground(Color.GREEN);
+			}
+			if (FieldTrip.get(day.getDate()) != null) {
+				setForeground(Color.BLUE);
+			}
+			if (day.isSickDay()) {
+				setFont(new Font(getFont().getFontName(), Font.ITALIC, getFont().getSize()));
+			}
+			if (day.isVacationDay()) {
+				setForeground(new Color(0x802A2A));
+			}
 		} else {
 			setText("");
 		}
@@ -85,9 +112,6 @@ public class MonthTableRenderer extends JLabel implements TableCellRenderer {
 		if (table.getSelectedRow() == row && table.getSelectedColumn() == column) {
 			setBackground(Color.DARK_GRAY);
 			setForeground(Color.WHITE);
-		} else {
-			setBackground(Color.WHITE);
-			setForeground(Color.BLACK);
 		}
 
 		return this;
