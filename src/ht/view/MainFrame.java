@@ -162,6 +162,7 @@ public class MainFrame extends JFrame {
 	private JPanel jPanelYear;
 	private JPanel jPanelYearPicker;
 	private JRadioButton jRadioButtonHadSchool;
+	private JRadioButton jRadioButtonNoSchool;
 	private JRadioButton jRadioButtonSick;
 	private JRadioButton jRadioButtonVacation;
 	private JScrollPane jScrollPaneApril;
@@ -868,6 +869,7 @@ public class MainFrame extends JFrame {
 			jPanelDayCheckBoxes.add(getJCheckBoxCoOp());
 			jPanelDayCheckBoxes.add(getJRadioButtonSick());
 			jPanelDayCheckBoxes.add(getJRadioButtonVacation());
+			jPanelDayCheckBoxes.add(getJRadioButtonNoSchool());
 		}
 		return jPanelDayCheckBoxes;
 	}
@@ -1026,6 +1028,22 @@ public class MainFrame extends JFrame {
 			});
 		}
 		return jRadioButtonHadSchool;
+	}
+
+	private JRadioButton getJRadioButtonNoSchool() {
+		if (jRadioButtonNoSchool == null) {
+			jRadioButtonNoSchool = new JRadioButton();
+			jRadioButtonNoSchool.setSelected(true);
+			jRadioButtonNoSchool.setText("No School");
+			jRadioButtonNoSchool.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent event) {
+					jRadioButtonNoSchoolItemItemStateChanged(event);
+				}
+			});
+		}
+		return jRadioButtonNoSchool;
 	}
 
 	private JRadioButton getJRadioButtonSick() {
@@ -1516,6 +1534,7 @@ public class MainFrame extends JFrame {
 		buttonGroupAttendance.add(getJRadioButtonHadSchool());
 		buttonGroupAttendance.add(getJRadioButtonSick());
 		buttonGroupAttendance.add(getJRadioButtonVacation());
+		buttonGroupAttendance.add(getJRadioButtonNoSchool());
 	}
 
 	private void initComponents() {
@@ -1526,7 +1545,7 @@ public class MainFrame extends JFrame {
 		add(getJTabbedPaneTabs(), BorderLayout.CENTER);
 		setJMenuBar(getJMenuBarMain());
 		initButtonGroupAttendance();
-		setSize(983, 668);
+		pack();
 	}
 
 	private JPanel getJPanelAssignmentsControls() {
@@ -1851,6 +1870,20 @@ public class MainFrame extends JFrame {
 	 * 
 	 * @param event
 	 */
+	private void jRadioButtonNoSchoolItemItemStateChanged(ItemEvent event) {
+		if (getSelectedDay() != null) {
+			getSelectedDay().setHadSchool(false);
+			getSelectedDay().setCoopDay(false);
+			getSelectedDay().setSickDay(false);
+			getSelectedDay().setVacationDay(false);
+		}
+	}
+
+	/**
+	 * Event: Attendance changed.
+	 * 
+	 * @param event
+	 */
 	private void jRadioButtonSickItemItemStateChanged(ItemEvent event) {
 		if (getSelectedDay() != null) {
 			getSelectedDay().setSickDay(event.getStateChange() == ItemEvent.SELECTED);
@@ -1903,7 +1936,7 @@ public class MainFrame extends JFrame {
 		getJCheckBoxCoOp().setSelected(getSelectedDay().isCoopDay());
 		getJRadioButtonSick().setSelected(getSelectedDay().isSickDay());
 		getJRadioButtonVacation().setSelected(getSelectedDay().isVacationDay());
-		if (!getSelectedDay().isCoopDay() && !getSelectedDay().isSickDay() && !getSelectedDay().isVacationDay()) {
+		if (!getSelectedDay().hadSchool() && !getSelectedDay().isCoopDay() && !getSelectedDay().isSickDay() && !getSelectedDay().isVacationDay()) {
 			buttonGroupAttendance.clearSelection();
 		}
 
