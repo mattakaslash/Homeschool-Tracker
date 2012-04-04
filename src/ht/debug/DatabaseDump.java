@@ -70,7 +70,7 @@ public class DatabaseDump {
 
 		System.out.println("Day");
 		System.out.println("---------------------------------------------------------------------------------------------");
-		for (Object o : em.createQuery("select o from Day o").getResultList()) {
+		for (Object o : em.createQuery("select o from Day o order by o._date").getResultList()) {
 			System.out.println(((Day) o));
 		}
 		System.out.println();
