@@ -3,6 +3,7 @@
  */
 package ht.model.swing;
 
+import ht.model.Progress;
 import ht.model.ReadingListEntry;
 import ht.model.Student;
 
@@ -60,7 +61,7 @@ public class ReadingListTableModel implements TableModel {
 			value = Date.class;
 			break;
 		case 4:
-			value = Integer.class;
+			value = Progress.class;
 			break;
 		case 5:
 			value = Boolean.class;
@@ -222,7 +223,7 @@ public class ReadingListTableModel implements TableModel {
 			entry.setFinished((Date) value);
 			break;
 		case 4:
-			entry.setProgress((Integer) value);
+			entry.setProgress((Progress) value);
 			break;
 		case 5:
 			entry.setAssisted((Boolean) value);

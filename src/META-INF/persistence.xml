@@ -12,6 +12,7 @@
 		<class>ht.model.FieldTrip</class>
 		<class>ht.model.JournalEntry</class>
 		<class>ht.model.PlannerEntry</class>
+		<class>ht.model.Progress</class>
 		<class>ht.model.ReadingListEntry</class>
 		<class>ht.model.ReportCardEntry</class>
 		<class>ht.model.Student</class>

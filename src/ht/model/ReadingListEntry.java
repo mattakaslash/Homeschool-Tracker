@@ -102,8 +102,9 @@ public class ReadingListEntry {
 	@Column(name = "ID")
 	private Long _id;
 
-	@Column(name = "PROGRESS")
-	private Integer _progress;
+	@JoinColumn(name = "PROGRESS")
+	@OneToOne
+	private Progress _progress;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "STARTED")
@@ -124,7 +125,7 @@ public class ReadingListEntry {
 		setAuthor("");
 		setStarted(new Date());
 		setFinished(null);
-		setProgress(0);
+		setProgress(new Progress());
 		setAssisted(Boolean.FALSE);
 		setStudent(null);
 	}
@@ -140,7 +141,7 @@ public class ReadingListEntry {
 		setAuthor("");
 		setStarted(new Date());
 		setFinished(null);
-		setProgress(0);
+		setProgress(new Progress());
 		setAssisted(Boolean.FALSE);
 		setStudent(student);
 	}
@@ -176,7 +177,7 @@ public class ReadingListEntry {
 	/**
 	 * @return the progress
 	 */
-	public Integer getProgress() {
+	public Progress getProgress() {
 		return _progress;
 	}
 
@@ -237,7 +238,7 @@ public class ReadingListEntry {
 	 * @param progress
 	 *            the progress to set
 	 */
-	public void setProgress(Integer progress) {
+	public void setProgress(Progress progress) {
 		_progress = progress;
 	}
 

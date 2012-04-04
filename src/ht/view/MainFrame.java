@@ -11,6 +11,7 @@ import ht.model.swing.MonthTableModel;
 import ht.model.swing.ReadingListTableModel;
 import ht.util.MonthTableSelectionListener;
 import ht.util.SchoolYear;
+import ht.view.editor.ProgressCellEditor;
 import ht.view.editor.SubjectCellEditor;
 import ht.view.render.MonthTableRenderer;
 import ht.view.render.StudentCellRenderer;
@@ -117,6 +118,8 @@ public class MainFrame extends JFrame {
 	private Integer _selectedYear = SchoolYear.getStart().get(Calendar.YEAR);
 
 	private ButtonGroup buttonGroupAttendance;
+	private JButton jButtonAssignmentsAdd;
+	private JButton jButtonAssignmentsDelete;
 	private JButton jButtonCurriculumAdd;
 	private JButton jButtonCurriculumDelete;
 	private JButton jButtonNextYear;
@@ -150,6 +153,8 @@ public class MainFrame extends JFrame {
 	private JMenuItem jMenuItemFileExit;
 	private JMenuItem jMenuItemOptionsConfigureSubjects;
 	private JMenu jMenuOptions;
+	private JPanel jPanelAssignments;
+	private JPanel jPanelAssignmentsControls;
 	private JPanel jPanelCurriculum;
 	private JPanel jPanelCurriculumControls;
 	private JPanel jPanelDayCheckBoxes;
@@ -166,6 +171,7 @@ public class MainFrame extends JFrame {
 	private JRadioButton jRadioButtonSick;
 	private JRadioButton jRadioButtonVacation;
 	private JScrollPane jScrollPaneApril;
+	private JScrollPane jScrollPaneAssignments;
 	private JScrollPane jScrollPaneAugust;
 	private JScrollPane jScrollPaneCurriculum;
 	private JScrollPane jScrollPaneDecember;
@@ -183,6 +189,7 @@ public class MainFrame extends JFrame {
 	private JScrollPane jScrollPaneStudentList;
 	private JTabbedPane jTabbedPaneTabs;
 	private JTable jTableApril;
+	private JTable jTableAssignments;
 	private JTable jTableAugust;
 	private JTable jTableCurriculum;
 	private JTable jTableDecember;
@@ -199,12 +206,6 @@ public class MainFrame extends JFrame {
 	private JTextField jTextFieldFieldTripDescription;
 	private JTextField jTextFieldFieldTripLocation;
 	private JTextPane jTextPaneFieldTripNotes;
-	private JPanel jPanelAssignments;
-	private JTable jTableAssignments;
-	private JScrollPane jScrollPaneAssignments;
-	private JPanel jPanelAssignmentsControls;
-	private JButton jButtonAssignmentsAdd;
-	private JButton jButtonAssignmentsDelete;
 
 	/**
 	 * Defines the application's main interface.
@@ -451,6 +452,34 @@ public class MainFrame extends JFrame {
 		if (month != 12) {
 			getJTableDecember().getSelectionModel().clearSelection();
 		}
+	}
+
+	private JButton getJButtonAssignmentsAdd() {
+		if (jButtonAssignmentsAdd == null) {
+			jButtonAssignmentsAdd = new JButton();
+			jButtonAssignmentsAdd.setText("Add");
+			jButtonAssignmentsAdd.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					jButtonAssignmentsAddActionActionPerformed(event);
+				}
+			});
+		}
+		return jButtonAssignmentsAdd;
+	}
+
+	private JButton getJButtonAssignmentsDelete() {
+		if (jButtonAssignmentsDelete == null) {
+			jButtonAssignmentsDelete = new JButton();
+			jButtonAssignmentsDelete.setText("Delete");
+			jButtonAssignmentsDelete.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					jButtonAssignmentsDeleteActionActionPerformed(event);
+				}
+			});
+		}
+		return jButtonAssignmentsDelete;
 	}
 
 	private JButton getJButtonCurriculumAdd() {
@@ -836,6 +865,32 @@ public class MainFrame extends JFrame {
 		return jMenuItemFileExit;
 	}
 
+	private JPanel getJPanelAssignments() {
+		if (jPanelAssignments == null) {
+			jPanelAssignments = new JPanel();
+			jPanelAssignments.setLayout(new BorderLayout());
+			jPanelAssignments.add(getJPanelAssignmentsControls(), BorderLayout.SOUTH);
+			jPanelAssignments.add(getJScrollPaneAssignments(), BorderLayout.CENTER);
+			jPanelAssignments.addComponentListener(new ComponentAdapter() {
+	
+				public void componentShown(ComponentEvent event) {
+					jPanelAssignmentsComponentComponentShown(event);
+				}
+			});
+		}
+		return jPanelAssignments;
+	}
+
+	private JPanel getJPanelAssignmentsControls() {
+		if (jPanelAssignmentsControls == null) {
+			jPanelAssignmentsControls = new JPanel();
+			jPanelAssignmentsControls.setPreferredSize(new Dimension(100, 100));
+			jPanelAssignmentsControls.add(getJButtonAssignmentsAdd());
+			jPanelAssignmentsControls.add(getJButtonAssignmentsDelete());
+		}
+		return jPanelAssignmentsControls;
+	}
+
 	private JPanel getJPanelCurriculum() {
 		if (jPanelCurriculum == null) {
 			jPanelCurriculum = new JPanel();
@@ -1084,6 +1139,14 @@ public class MainFrame extends JFrame {
 		return jScrollPaneApril;
 	}
 
+	private JScrollPane getJScrollPaneAssignments() {
+		if (jScrollPaneAssignments == null) {
+			jScrollPaneAssignments = new JScrollPane();
+			jScrollPaneAssignments.setViewportView(getJTableAssignments());
+		}
+		return jScrollPaneAssignments;
+	}
+
 	private JScrollPane getJScrollPaneAugust() {
 		if (jScrollPaneAugust == null) {
 			jScrollPaneAugust = new JScrollPane();
@@ -1234,6 +1297,15 @@ public class MainFrame extends JFrame {
 			jTableApril.setShowVerticalLines(false);
 		}
 		return jTableApril;
+	}
+
+	private JTable getJTableAssignments() {
+		if (jTableAssignments == null) {
+			jTableAssignments = new JTable();
+			jTableAssignments.setModel(new DefaultTableModel(new Object[0][0], new String[] { "Subject", "Title", "Category",
+					"Date Assigned", "Date Completed", "Points Earned", "Points Possible", "Percentage" }));
+		}
+		return jTableAssignments;
 	}
 
 	private JTable getJTableAugust() {
@@ -1449,7 +1521,7 @@ public class MainFrame extends JFrame {
 		}
 		return jTableOctober;
 	}
-
+	
 	private JTable getJTableReadingList() {
 		if (jTableReadingList == null) {
 			jTableReadingList = new JTable();
@@ -1507,7 +1579,7 @@ public class MainFrame extends JFrame {
 	public Day getSelectedDay() {
 		return _selectedDay;
 	}
-	
+
 	/**
 	 * @return the selectedFieldTrip
 	 */
@@ -1548,75 +1620,29 @@ public class MainFrame extends JFrame {
 		pack();
 	}
 
-	private JPanel getJPanelAssignmentsControls() {
-		if (jPanelAssignmentsControls == null) {
-			jPanelAssignmentsControls = new JPanel();
-			jPanelAssignmentsControls.setPreferredSize(new Dimension(100, 100));
-			jPanelAssignmentsControls.add(getJButtonAssignmentsAdd());
-			jPanelAssignmentsControls.add(getJButtonAssignmentsDelete());
-		}
-		return jPanelAssignmentsControls;
+	private void jButtonAssignmentsAddActionActionPerformed(ActionEvent event) {
+		Assignment.save(new Assignment(getSelectedStudent()));
+		((AssignmentTableModel) getJTableAssignments().getModel()).tableChanged();
 	}
 
-	private JButton getJButtonAssignmentsDelete() {
-		if (jButtonAssignmentsDelete == null) {
-			jButtonAssignmentsDelete = new JButton();
-			jButtonAssignmentsDelete.setText("Delete");
-			jButtonAssignmentsDelete.addActionListener(new ActionListener() {
-	
-				public void actionPerformed(ActionEvent event) {
-					jButtonAssignmentsDeleteActionActionPerformed(event);
+	private void jButtonAssignmentsDeleteActionActionPerformed(ActionEvent event) {
+		if (getJTableAssignments().getSelectedRowCount() > 0) {
+			int[] rows = getJTableAssignments().getSelectedRows();
+			StringBuilder titles = new StringBuilder();
+			for (int row : rows) {
+				titles.append((String) getJTableAssignments().getValueAt(row, 1));
+				titles.append('\n');
+			}
+
+			int n = JOptionPane.showConfirmDialog(this, "Delete the following assignments?\n\n" + titles.toString(),
+					"Are you sure?", JOptionPane.YES_NO_OPTION);
+			if (n == JOptionPane.YES_OPTION) {
+				for (int x = rows.length - 1; x >= 0; x--) {
+					Assignment.remove(rows[x], getSelectedStudent());
+					((AssignmentTableModel) getJTableAssignments().getModel()).tableChanged();
 				}
-			});
+			}
 		}
-		return jButtonAssignmentsDelete;
-	}
-
-	private JButton getJButtonAssignmentsAdd() {
-		if (jButtonAssignmentsAdd == null) {
-			jButtonAssignmentsAdd = new JButton();
-			jButtonAssignmentsAdd.setText("Add");
-			jButtonAssignmentsAdd.addActionListener(new ActionListener() {
-	
-				public void actionPerformed(ActionEvent event) {
-					jButtonAssignmentsAddActionActionPerformed(event);
-				}
-			});
-		}
-		return jButtonAssignmentsAdd;
-	}
-
-	private JPanel getJPanelAssignments() {
-		if (jPanelAssignments == null) {
-			jPanelAssignments = new JPanel();
-			jPanelAssignments.setLayout(new BorderLayout());
-			jPanelAssignments.add(getJPanelAssignmentsControls(), BorderLayout.SOUTH);
-			jPanelAssignments.add(getJScrollPaneAssignments(), BorderLayout.CENTER);
-			jPanelAssignments.addComponentListener(new ComponentAdapter() {
-	
-				public void componentShown(ComponentEvent event) {
-					jPanelAssignmentsComponentComponentShown(event);
-				}
-			});
-		}
-		return jPanelAssignments;
-	}
-
-	private JScrollPane getJScrollPaneAssignments() {
-		if (jScrollPaneAssignments == null) {
-			jScrollPaneAssignments = new JScrollPane();
-			jScrollPaneAssignments.setViewportView(getJTableAssignments());
-		}
-		return jScrollPaneAssignments;
-	}
-
-	private JTable getJTableAssignments() {
-		if (jTableAssignments == null) {
-			jTableAssignments = new JTable();
-			jTableAssignments.setModel(new DefaultTableModel(new Object[0][0], new String[] { "Subject", "Title", "Category",
-					"Date Assigned", "Date Completed", "Points Earned", "Points Possible", "Percentage" }));
-		}
-		return jTableAssignments;
 	}
 
 	/**
@@ -1809,6 +1835,15 @@ public class MainFrame extends JFrame {
 		sm.setVisible(true);
 	}
 
+	private void jPanelAssignmentsComponentComponentShown(ComponentEvent event) {
+		if (getSelectedStudent() != null) {
+			assignmentTableModel.setStudent(getSelectedStudent());
+			getJTableAssignments().setModel(assignmentTableModel);
+			getJTableAssignments().getColumnModel().getColumn(0).setCellEditor(new SubjectCellEditor());
+			getJTableAssignments().repaint();
+		}
+	}
+
 	/**
 	 * Event: Curriculum tab shown.
 	 * 
@@ -1827,6 +1862,7 @@ public class MainFrame extends JFrame {
 		if (getSelectedStudent() != null) {
 			readingListTableModel.setStudent(getSelectedStudent());
 			getJTableReadingList().setModel(readingListTableModel);
+			getJTableReadingList().getColumnModel().getColumn(4).setCellEditor(new ProgressCellEditor());
 			getJTableReadingList().repaint();
 		}
 	}
@@ -1971,7 +2007,7 @@ public class MainFrame extends JFrame {
 		cal.set(Calendar.YEAR, year);
 		loadDay(cal);
 	}
-
+	
 	/**
 	 * Updates all the calendars for the selected year.
 	 */
@@ -2011,7 +2047,7 @@ public class MainFrame extends JFrame {
 	public void setSelectedDay(Day selectedDay) {
 		_selectedDay = selectedDay;
 	}
-	
+
 	/**
 	 * @param selectedFieldTrip
 	 *            the selectedFieldTrip to set
@@ -2046,39 +2082,5 @@ public class MainFrame extends JFrame {
 		getJTabbedPaneTabs().setEnabledAt(2, value);
 		getJTabbedPaneTabs().setEnabledAt(3, value);
 		getJTabbedPaneTabs().setEnabledAt(4, value);
-	}
-
-	private void jButtonAssignmentsAddActionActionPerformed(ActionEvent event) {
-		Assignment.save(new Assignment(getSelectedStudent()));
-		((AssignmentTableModel) getJTableAssignments().getModel()).tableChanged();
-	}
-
-	private void jButtonAssignmentsDeleteActionActionPerformed(ActionEvent event) {
-		if (getJTableAssignments().getSelectedRowCount() > 0) {
-			int[] rows = getJTableAssignments().getSelectedRows();
-			StringBuilder titles = new StringBuilder();
-			for (int row : rows) {
-				titles.append((String) getJTableAssignments().getValueAt(row, 1));
-				titles.append('\n');
-			}
-
-			int n = JOptionPane.showConfirmDialog(this, "Delete the following assignments?\n\n" + titles.toString(),
-					"Are you sure?", JOptionPane.YES_NO_OPTION);
-			if (n == JOptionPane.YES_OPTION) {
-				for (int x = rows.length - 1; x >= 0; x--) {
-					Assignment.remove(rows[x], getSelectedStudent());
-					((AssignmentTableModel) getJTableAssignments().getModel()).tableChanged();
-				}
-			}
-		}
-	}
-
-	private void jPanelAssignmentsComponentComponentShown(ComponentEvent event) {
-		if (getSelectedStudent() != null) {
-			assignmentTableModel.setStudent(getSelectedStudent());
-			getJTableAssignments().setModel(assignmentTableModel);
-			getJTableAssignments().getColumnModel().getColumn(0).setCellEditor(new SubjectCellEditor());
-			getJTableAssignments().repaint();
-		}
 	}
 }
