@@ -176,7 +176,12 @@ public class CurriculumTableModel implements TableModel {
 	 */
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		String input = (String) value;
+		String input = "";
+		if (value instanceof String) {
+			input = (String) value;
+		} else if (value instanceof URL) {
+			input = ((URL) value).toString();
+		}
 
 		CurriculumLogEntry entry = CurriculumLogEntry.get(row);
 
