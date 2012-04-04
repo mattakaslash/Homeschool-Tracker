@@ -100,6 +100,11 @@ public class MainFrame extends JFrame {
 	 * Stores the currently-selected school day.
 	 */
 	private Day _selectedDay = null;
+	
+	/**
+	 * Stores the currently-selected field trip.
+	 */
+	private FieldTrip _selectedFieldTrip;
 
 	/**
 	 * Stores the currently-selected student from the students tab.
@@ -191,21 +196,13 @@ public class MainFrame extends JFrame {
 	private JTable jTableReadingList;
 	private JTable jTableSeptember;
 	private JTextField jTextFieldFieldTripDescription;
-
 	private JTextField jTextFieldFieldTripLocation;
-
 	private JTextPane jTextPaneFieldTripNotes;
-
 	private JPanel jPanelAssignments;
-
 	private JTable jTableAssignments;
-
 	private JScrollPane jScrollPaneAssignments;
-
 	private JPanel jPanelAssignmentsControls;
-
 	private JButton jButtonAssignmentsAdd;
-
 	private JButton jButtonAssignmentsDelete;
 
 	/**
@@ -1492,6 +1489,13 @@ public class MainFrame extends JFrame {
 	public Day getSelectedDay() {
 		return _selectedDay;
 	}
+	
+	/**
+	 * @return the selectedFieldTrip
+	 */
+	public FieldTrip getSelectedFieldTrip() {
+		return _selectedFieldTrip;
+	}
 
 	/**
 	 * @return the selectedStudent
@@ -1874,9 +1878,19 @@ public class MainFrame extends JFrame {
 		if (getSelectedDay() != null) {
 			Day.save(getSelectedDay());
 			if (!getJTextFieldFieldTripDescription().getText().isEmpty()) {
-				FieldTrip trip = new FieldTrip(getJTextFieldFieldTripDescription().getText().trim(),
-						getJTextFieldFieldTripLocation().getText().trim(), getJTextPaneFieldTripNotes().getText(), getSelectedDay());
-				FieldTrip.save(trip);
+				if (getSelectedFieldTrip() == null) {
+					setSelectedFieldTrip(new FieldTrip(getJTextFieldFieldTripDescription().getText().trim(),
+							getJTextFieldFieldTripLocation().getText().trim(), getJTextPaneFieldTripNotes().getText(),
+							getSelectedDay()));
+				} else {
+					getSelectedFieldTrip().setWhat(getJTextFieldFieldTripDescription().getText().trim());
+					getSelectedFieldTrip().setLocation(getJTextFieldFieldTripLocation().getText().trim());
+					getSelectedFieldTrip().setNotes(getJTextPaneFieldTripNotes().getText());
+					
+				}
+				FieldTrip.save(getSelectedFieldTrip());
+			} else if (getSelectedFieldTrip() != null && getJTextFieldFieldTripDescription().getText().isEmpty()) {
+				FieldTrip.remove(getSelectedFieldTrip());
 			}
 		}
 
@@ -1894,11 +1908,11 @@ public class MainFrame extends JFrame {
 		}
 
 		// load field trip details
-		FieldTrip trip = FieldTrip.get(getSelectedDay().getDate());
-		if (trip != null) {
-			getJTextFieldFieldTripDescription().setText(trip.getWhat());
-			getJTextFieldFieldTripLocation().setText(trip.getLocation());
-			getJTextPaneFieldTripNotes().setText(trip.getNotes());
+		setSelectedFieldTrip(FieldTrip.get(getSelectedDay().getDate()));
+		if (getSelectedFieldTrip() != null) {
+			getJTextFieldFieldTripDescription().setText(getSelectedFieldTrip().getWhat());
+			getJTextFieldFieldTripLocation().setText(getSelectedFieldTrip().getLocation());
+			getJTextPaneFieldTripNotes().setText(getSelectedFieldTrip().getNotes());
 		} else {
 			getJTextFieldFieldTripDescription().setText("");
 			getJTextFieldFieldTripLocation().setText("");
@@ -1963,6 +1977,14 @@ public class MainFrame extends JFrame {
 	 */
 	public void setSelectedDay(Day selectedDay) {
 		_selectedDay = selectedDay;
+	}
+	
+	/**
+	 * @param selectedFieldTrip
+	 *            the selectedFieldTrip to set
+	 */
+	public void setSelectedFieldTrip(FieldTrip selectedFieldTrip) {
+		_selectedFieldTrip = selectedFieldTrip;
 	}
 
 	/**

@@ -48,6 +48,21 @@ public class FieldTrip {
 	}
 
 	/**
+	 * Removes the provided field trip from the database.
+	 * 
+	 * @param trip
+	 *            the field trip
+	 */
+	public static void remove(FieldTrip trip) {
+		EntityManager em = HomeschoolTracker.getFactory().createEntityManager();
+		FieldTrip t = em.merge(trip);
+		em.getTransaction().begin();
+		em.remove(t);
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	/**
 	 * Saves the given field trip to the database.
 	 * 
 	 * @param trip
@@ -59,7 +74,6 @@ public class FieldTrip {
 		em.merge(trip);
 		em.getTransaction().commit();
 		em.close();
-
 	}
 
 	@Id
@@ -157,7 +171,7 @@ public class FieldTrip {
 	 * @param where
 	 *            the where to set
 	 */
-	private void setLocation(String where) {
+	public void setLocation(String where) {
 		_location = where;
 	}
 
@@ -165,7 +179,7 @@ public class FieldTrip {
 	 * @param notes
 	 *            the notes to set
 	 */
-	private void setNotes(String notes) {
+	public void setNotes(String notes) {
 		_notes = notes;
 	}
 
@@ -173,7 +187,7 @@ public class FieldTrip {
 	 * @param what
 	 *            the what to set
 	 */
-	private void setWhat(String what) {
+	public void setWhat(String what) {
 		_what = what;
 	}
 
