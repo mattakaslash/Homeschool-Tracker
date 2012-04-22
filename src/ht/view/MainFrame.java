@@ -2079,7 +2079,6 @@ public class MainFrame extends JFrame {
 	 *            true, if tabs should be enabled
 	 */
 	private void setTabsEnabled(Boolean value) {
-		getJTabbedPaneTabs().setEnabledAt(2, value);
 		getJTabbedPaneTabs().setEnabledAt(3, value);
 		getJTabbedPaneTabs().setEnabledAt(4, value);
 	}
